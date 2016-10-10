@@ -83,7 +83,7 @@ public class Lexer {
     }
 
     private boolean isEndOfFile(char ch) {
-        return ch == (char)-1;
+        return ch == (char)(-1);
     }
 
     private String getTokenWithPredicate(Predicate<Character> predicate) {
@@ -176,6 +176,7 @@ public class Lexer {
                     return symbol;
                 }
             }
+
             return new Lexeme(this.symbols.get(ch));
         }
 
