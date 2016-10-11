@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78c25255-bb14-4e6b-8523-c64445f3662b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Lexeme.java" afterPath="$PROJECT_DIR$/src/DPL/Lexeme.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Lexer.java" afterPath="$PROJECT_DIR$/src/DPL/Lexer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/parseTree.dot" afterPath="$PROJECT_DIR$/parseTree.dot" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Recognizer.java" afterPath="$PROJECT_DIR$/src/DPL/Recognizer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/TokenType.java" afterPath="$PROJECT_DIR$/src/DPL/TokenType.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test1.dpl" afterPath="$PROJECT_DIR$/test1.dpl" />
     </list>
     <ignored path="DPL.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,7 +30,7 @@
       <file leaf-file-name="Lexer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
+            <state relative-caret-position="3006">
               <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -48,7 +44,7 @@
       <file leaf-file-name="test.dpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.dpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-263">
+            <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -68,8 +64,8 @@
       <file leaf-file-name="Lexeme.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
+            <state relative-caret-position="126">
+              <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -80,19 +76,13 @@
       <file leaf-file-name="Recognizer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DPL/Recognizer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="460" column="170" selection-start-line="460" selection-start-column="170" selection-end-line="460" selection-end-column="170" />
+            <state relative-caret-position="144">
+              <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#4285#4286#0" expanded="true" />
-                <element signature="e#4344#4345#0" expanded="true" />
-                <element signature="e#11950#11951#0" expanded="true" />
-                <element signature="e#12013#12014#0" expanded="true" />
-                <element signature="e#12056#12057#0" expanded="true" />
-                <element signature="e#12098#12099#0" expanded="true" />
-                <element signature="e#13100#13101#0" expanded="true" />
-                <element signature="e#13138#13139#0" expanded="true" />
+                <element signature="e#1905#1906#0" expanded="true" />
+                <element signature="e#1950#1951#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -101,7 +91,7 @@
       <file leaf-file-name="TokenType.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="-182">
               <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -479,7 +469,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/DPL/Recognizer.java</url>
+          <line>73</line>
+          <properties />
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -488,6 +486,67 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3204">
+          <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2346#2347#0" expanded="true" />
+            <element signature="e#2385#2386#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.dpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DPL.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Recognizer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1818">
@@ -533,14 +592,8 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -600,14 +653,8 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -667,14 +714,8 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -734,14 +775,8 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -801,14 +836,8 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -838,19 +867,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.dpl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-263">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -858,7 +877,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
+        <state relative-caret-position="3006">
           <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -868,9 +887,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
+        <state relative-caret-position="-182">
           <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -880,19 +909,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Recognizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="460" column="170" selection-start-line="460" selection-start-column="170" selection-end-line="460" selection-end-column="170" />
+        <state relative-caret-position="144">
+          <caret line="136" column="50" selection-start-line="136" selection-start-column="50" selection-end-line="136" selection-end-column="50" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#4285#4286#0" expanded="true" />
-            <element signature="e#4344#4345#0" expanded="true" />
-            <element signature="e#11950#11951#0" expanded="true" />
-            <element signature="e#12013#12014#0" expanded="true" />
-            <element signature="e#12056#12057#0" expanded="true" />
-            <element signature="e#12098#12099#0" expanded="true" />
-            <element signature="e#13100#13101#0" expanded="true" />
-            <element signature="e#13138#13139#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+            <element signature="e#1950#1951#0" expanded="true" />
           </folding>
         </state>
       </provider>

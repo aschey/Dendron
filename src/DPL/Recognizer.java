@@ -28,9 +28,9 @@ public class Recognizer {
         Lexeme l = recognizer.statements();
         //recognizer.traverse(l);
         TreeGraphWriter t = new TreeGraphWriter(l);
-        t.createGraph();
+        //t.createGraph();
         //System.out.println(l.right.left.right.left.type);
-        //recognizer.prettyPrint(l);
+        recognizer.prettyPrint(l);
     }
 
     public Recognizer() {
@@ -62,64 +62,85 @@ public class Recognizer {
         }
     }
 
+    private boolean checkTypes(TokenType[] types, Lexeme tree) {
+        return Arrays.stream(types).anyMatch(t -> t.equals(tree.type));
+    }
+
+    private void printToken(Object token) {
+        System.out.print(token + " ");
+    }
+
     private void prettyPrint(Lexeme tree) {
         if (tree == null) {
             return;
         }
-        //System.out.println("type = " + tree.type);
-        if (Arrays.stream(this.binaryOperators).anyMatch(t -> t.equals(tree.type))) {
+
+        if (this.checkTypes(new TokenType[] { WHILE, FOR, IF }, tree)) {
+            this.printToken(tree.type);
             this.prettyPrint(tree.left);
-            System.out.print(tree.type);
             this.prettyPrint(tree.right);
-            return;
         }
+
         switch(tree.type) {
             case INTEGER: {
-                System.out.print(tree.integer);
+                this.printToken(tree.integer);
                 break;
             }
             case VARIABLE: {
-                System.out.print(tree.str);
+                this.printToken(tree.str);
+                break;
             }
             case STRING: {
-                System.out.print("\"" + tree.str + "\"");
+                this.printToken("\"" + tree.str + "\"");
+                break;
             }
             case O_BRACKET: {
                 System.out.print("[");
                 this.prettyPrint(tree.right);
                 System.out.print("]");
+                break;
             }
             case NEGATIVE: {
                 System.out.print("-");
                 this.prettyPrint(tree.right);
+                break;
             }
             case VAR: {
                 System.out.print("var ");
                 this.prettyPrint(tree.left);
                 System.out.print(" = ");
                 this.prettyPrint(tree.right);
+                break;
             }
             case DEF: {
                 System.out.print("def ");
                 this.prettyPrint(tree.left);
-                this.prettyPrint(tree.right);
-                System.out.println("[");
+                System.out.print("[ ");
                 this.prettyPrint(tree.right.left);
+                System.out.print("]");
+                System.out.println();
                 System.out.println("[");
                 this.prettyPrint(tree.right.right);
+                System.out.println("]");
+                break;
             }
-            case GLUE: {
-                this.prettyPrint(tree.left);
-                this.prettyPrint(tree.right);
-            }
-
             case VAR_EXPR: {
                 this.prettyPrint(tree.left);
                 if (tree.right != null) {
-                    System.out.println("[");
+                    System.out.print("[");
                     this.prettyPrint(tree.right);
-                    System.out.println("]");
+                    System.out.print("]");
                 }
+                break;
+            }
+            case BINARY: {
+                this.prettyPrint(tree.right.left);
+                this.printToken(tree.left.type);
+                this.prettyPrint(tree.right.right);
+            }
+            default: {
+                this.prettyPrint(tree.left);
+                this.prettyPrint(tree.right);
             }
         }
     }
@@ -279,19 +300,10 @@ public class Recognizer {
         printMethod("statements");
         Lexeme tree = new Lexeme(STATEMENT);
         tree.left = this.statement();
-//        if (tree.right.left != null) {
-//            System.out.println(tree.right.left.getVal());
-//        }
-        //System.out.println(tree.getVal());
-        //System.out.println(tree.str);
+
         if (this.statementPending()) {
             tree.right = this.statements();
-//            if (tree.right.right.left != null) {
-//                System.out.println(tree.right.right.left.getVal());
-//            }
         }
-        //if (tree.right.right != null)
-            //System.out.println("VAL= " + tree.right.right.getVal());
         traverse(tree);
         return tree;
     }
@@ -305,7 +317,6 @@ public class Recognizer {
         }
         if (this.whileLoopPending()) {
             Lexeme l = this.whileLoop();
-            //System.out.println(l.right.left.getVal());
             traverse(l);
             return l;
         }
