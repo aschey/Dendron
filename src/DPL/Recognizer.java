@@ -6,13 +6,19 @@ import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import static DPL.TokenType.*;
 
 public class Recognizer {
     private Lexeme currentLexeme;
     private Lexer lexer;
-    private TokenType[] binaryOperators = new TokenType[] { LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, SLASH };
+    private HashMap<TokenType, String> binaryOpMappings = MapHelpers.initialize(
+        LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", SLASH, "/"
+    );
+    private TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
+    //private TokenType[] binaryOperators = new TokenType[] { LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, SLASH };
+
 
     private static boolean toPrint = false;
     private static boolean toTraverse = false;
@@ -75,12 +81,21 @@ public class Recognizer {
             return;
         }
 
-        if (this.checkTypes(new TokenType[] { WHILE, FOR, IF }, tree)) {
-            this.printToken(tree.type);
-            this.prettyPrint(tree.left);
-            this.prettyPrint(tree.right);
+        if (this.checkTypes(this.binaryOperators, tree)) {
+            this.printToken(this.binaryOpMappings.get(tree.type));
+            return;
         }
 
+        if (this.checkTypes(new TokenType[] { FOR, WHILE, IF }, tree)) {
+            printToken(tree.type);
+            printToken("[");
+            this.prettyPrint(tree.left);
+            System.out.println("]");
+            System.out.println("[");
+            this.prettyPrint(tree.right);
+            System.out.println("]");
+            return;
+        }
         switch(tree.type) {
             case INTEGER: {
                 this.printToken(tree.integer);
@@ -94,22 +109,18 @@ public class Recognizer {
                 this.printToken("\"" + tree.str + "\"");
                 break;
             }
-            case O_BRACKET: {
-                System.out.print("[");
-                this.prettyPrint(tree.right);
-                System.out.print("]");
-                break;
-            }
             case NEGATIVE: {
                 System.out.print("-");
                 this.prettyPrint(tree.right);
                 break;
             }
             case VAR: {
-                System.out.print("var ");
+                this.printToken("var");
                 this.prettyPrint(tree.left);
-                System.out.print(" = ");
-                this.prettyPrint(tree.right);
+                if (tree.right != null) {
+                    this.printToken("=");
+                    this.prettyPrint(tree.right);
+                }
                 break;
             }
             case DEF: {
@@ -127,7 +138,7 @@ public class Recognizer {
             case VAR_EXPR: {
                 this.prettyPrint(tree.left);
                 if (tree.right != null) {
-                    System.out.print("[");
+                    this.printToken("[");
                     this.prettyPrint(tree.right);
                     System.out.print("]");
                 }
@@ -135,8 +146,17 @@ public class Recognizer {
             }
             case BINARY: {
                 this.prettyPrint(tree.right.left);
-                this.printToken(tree.left.type);
+                this.prettyPrint(tree.left);
                 this.prettyPrint(tree.right.right);
+                break;
+            }
+            case STATEMENT: {
+                this.prettyPrint(tree.left);
+                if (tree.left.type == VAR || tree.left.type == VAR_EXPR) {
+                    System.out.println(";");
+                }
+                this.prettyPrint(tree.right);
+                break;
             }
             default: {
                 this.prettyPrint(tree.left);

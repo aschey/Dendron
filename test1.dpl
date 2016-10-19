@@ -39,6 +39,7 @@ def g[b c]
 ]
 
 var a = 2 + 2;
+var b;
 
 
 `this is a comment
