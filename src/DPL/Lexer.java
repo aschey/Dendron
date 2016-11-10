@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PushbackInputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import java.util.ArrayList;
 
 import static DPL.TokenType.*;
 
@@ -15,7 +17,7 @@ import static DPL.TokenType.*;
 public class Lexer {
     private PushbackInputStream reader;
     private boolean lineIsComment;
-    private HashMap<String, DPL.TokenType> keywords;
+    private ArrayList<String> keywords;
     private HashMap<Character, DPL.TokenType> symbols;
 
     public static void main(String[] args) {
@@ -37,27 +39,10 @@ public class Lexer {
         }
         this.lineIsComment = false;
 
-        this.keywords = new HashMap<>();
-        keywords.put("if", IF);
-        keywords.put("else", ELSE);
-        keywords.put("for", FOR);
-        keywords.put("while", WHILE);
-        keywords.put("var", VAR);
-        keywords.put("def", DEF);
+        this.keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true", "false"));
 
-        this.symbols = new HashMap<>();
-        symbols.put('[', O_BRACKET);
-        symbols.put(']', C_BRACKET);
-        symbols.put(',', COMMA);
-        symbols.put(';', SEMICOLON);
-        symbols.put('*', STAR);
-        symbols.put('+', PLUS);
-        symbols.put('-', MINUS);
-        symbols.put(':', COLON);
-        symbols.put('<', LT);
-        symbols.put('>', GT);
-        symbols.put('=', ASSIGN);
-        symbols.put('/', SLASH);
+        this.symbols = Helpers.mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
+            PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '=', ASSIGN, '/', SLASH);
     }
 
     private char read() {
@@ -139,11 +124,11 @@ public class Lexer {
 
     private Lexeme lexVariableOrKeyword() {
         String token = this.getTokenWithPredicate((Character ch) -> Character.isAlphabetic(ch) || Character.isDigit(ch));
-        if (!this.keywords.containsKey(token)) {
+        if (!this.keywords.contains(token)) {
             return new Lexeme(VARIABLE, token);
         }
 
-        return new Lexeme(this.keywords.get(token));
+        return new Lexeme(Helpers.stringToTokenType(token));
     }
 
     private Lexeme lexCompoundSymbol(Character ch) {

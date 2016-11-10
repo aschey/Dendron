@@ -26,6 +26,9 @@ public enum TokenType {
     VARIABLE,
     INTEGER,
     STRING,
+    BOOL,
+    TRUE,
+    FALSE,
     IF,
     ELSE,
     FOR,
@@ -38,5 +41,8 @@ public enum TokenType {
     LIST,
     UNKNOWN,
     NONE,
-    END_OF_INPUT
+    END_OF_INPUT,
+    ENV,
+    TABLE,
+    CLOSURE
 }

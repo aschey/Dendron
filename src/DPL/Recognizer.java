@@ -2,10 +2,7 @@
  * Created by aschey on 9/24/16.
  */
 package DPL;
-import java.io.FileNotFoundException;
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 import static DPL.TokenType.*;
@@ -13,7 +10,7 @@ import static DPL.TokenType.*;
 public class Recognizer {
     private Lexeme currentLexeme;
     private Lexer lexer;
-    private HashMap<TokenType, String> binaryOpMappings = MapHelpers.initialize(
+    private HashMap<TokenType, String> binaryOpMappings = Helpers.mapInitialize(
         LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", SLASH, "/"
     );
     private TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
@@ -30,18 +27,23 @@ public class Recognizer {
     }
 
     public static void main(String[] args) {
-        Recognizer recognizer = new Recognizer();
+        Recognizer recognizer = new Recognizer("test1.dpl");
         Lexeme l = recognizer.statements();
         //recognizer.traverse(l);
-        TreeGraphWriter t = new TreeGraphWriter(l);
-        //t.createGraph();
+        GraphWriter t = new GraphWriter(l, "parseTree");
+        t.createGraph();
+        t.showGraph();
         //System.out.println(l.right.left.right.left.type);
         recognizer.prettyPrint(l);
     }
 
-    public Recognizer() {
-        this.lexer = new Lexer("test1.dpl");
+    public Recognizer(String filename) {
+        this.lexer = new Lexer(filename);
         this.currentLexeme = this.lexer.lex();
+    }
+
+    Lexeme recognize() {
+        return this.statements();
     }
 
     private void traverse(Lexeme tree) {
@@ -105,6 +107,14 @@ public class Recognizer {
                 this.printToken(tree.str);
                 break;
             }
+            case TRUE: {
+                this.printToken("true");
+                break;
+            }
+            case FALSE: {
+                this.printToken("false");
+                break;
+            }
             case STRING: {
                 this.printToken("\"" + tree.str + "\"");
                 break;
@@ -151,7 +161,22 @@ public class Recognizer {
                 break;
             }
             case STATEMENT: {
-                this.prettyPrint(tree.left);
+                if (tree.left.type == IF) {
+                    this.printToken(tree.left.type);
+                    this.printToken("[");
+                    this.prettyPrint(tree.left.left);
+                    System.out.println("]");
+                    System.out.println("[");
+                    this.prettyPrint(tree.left.right.left);
+                    System.out.println("]");
+                    if (tree.left.type == IF && tree.left.right.right.type == IF) {
+                        this.printToken("ELSE");
+                    }
+                    this.prettyPrint(tree.left.right.right);
+                }
+                else {
+                    this.prettyPrint(tree.left);
+                }
                 if (tree.left.type == VAR || tree.left.type == VAR_EXPR) {
                     System.out.println(";");
                 }
@@ -239,7 +264,7 @@ public class Recognizer {
     private Lexeme unary() {
         printMethod("unary");
         Lexeme tree;
-        if (this.checkMultiple(new TokenType[] {INTEGER, STRING})) {
+        if (this.checkMultiple(new TokenType[] {INTEGER, STRING, TRUE, FALSE})) {
             Lexeme l = this.advance();
             traverse(l);
             return l;
@@ -368,11 +393,7 @@ public class Recognizer {
         Lexeme tree = this.match(WHILE);
         tree.left = this.conditionalOrLoopHeader();
         tree.right = this.block();
-        //traverse(tree.right);
-//        if (tree.right.right.left != null) {
-//            System.out.println(tree.right.left.getVal());
-//        }
-        //System.out.println("WHILE=" + tree.right.left.getVal());
+
         traverse(tree);
         return tree;
     }
@@ -410,12 +431,6 @@ public class Recognizer {
         traverse(l);
         return l;
     }
-
-//    private void binaryExpr() {
-//        unary();
-//        binaryOperator();
-//        unary();
-//    }
 
     private Lexeme varExpression() {
         printMethod("varExpression");
@@ -501,56 +516,3 @@ public class Recognizer {
     }
 }
 
-class TreeGraphWriter {
-    private int nodeNum;
-    private int nullNum;
-    private PrintWriter graph;
-    private ArrayDeque<Lexeme> queue;
-    private Lexeme tree;
-
-    public TreeGraphWriter(Lexeme tree) {
-        this.nodeNum = 1;
-        this.nullNum = 0;
-        try {
-            this.graph = new PrintWriter("parseTree.dot");
-        }
-        catch (FileNotFoundException ex) {
-            System.out.println(ex);
-        }
-        this.queue = new ArrayDeque<>();
-        this.tree = tree;
-    }
-
-    public void createGraph() {
-        this.graph.write("digraph {\n");
-        this.graph.write("graph [ordering=\"out\"];\n");
-        this.queue.addFirst(this.tree);
-        this.graph.write("Node0 [label=" + this.tree.getVal() + "];\n");
-        int localRootNode = 0;
-        while (!this.queue.isEmpty()) {
-            Lexeme current = this.queue.removeLast();
-            String curNode = "Node" + localRootNode;
-            this.writeToGraph(curNode, current.left);
-            this.writeToGraph(curNode, current.right);
-            localRootNode++;
-        }
-        this.graph.write("}");
-        this.graph.close();
-    }
-
-    private void writeToGraph(String curNode, Lexeme directionNode) {
-        if (directionNode != null) {
-            String nextNode = "Node" + this.nodeNum;
-            this.nodeNum++;
-            this.graph.write(nextNode + " [label=" + directionNode.getVal() + "];\n");
-            this.graph.write(curNode + " -> " + nextNode + ";\n");
-            this.queue.addFirst(directionNode);
-        }
-        else {
-            String nullStr = "Null" + this.nullNum;
-            this.nullNum++;
-            this.graph.write(nullStr + " [shape=point];\n");
-            this.graph.write(curNode + " -> " + nullStr + ";\n");
-        }
-    }
-}
