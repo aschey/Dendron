@@ -7,20 +7,26 @@ import static DPL.TokenType.*;
  * Created by aschey on 10/19/16.
  */
 public class Evaluator {
+    private Environment e;
     public static void main(String[] args) {
         Recognizer r = new Recognizer("func.dpl");
         Lexeme func = r.recognize();
-        //GraphWriter g = new GraphWriter(func, "func");
-        Evaluator e = new Evaluator();
+        //GraphWriter.quickGraph(func, "func");
+        Evaluator eval = new Evaluator();
+        eval.eval(func, new Environment().createEnv());
         //e.evalProgram(func, e.createEnv());
         //g.createGraph();
         //g.showGraph();
-        Lexeme l = e.createEnv();
-        e.insert(new Lexeme(VARIABLE, "a"), new Lexeme(INTEGER, 1), l);
-        e.insert(new Lexeme(VARIABLE, "b"), new Lexeme(INTEGER, 2), l);
-        GraphWriter g = new GraphWriter(l, "envTest");
-        g.createGraph();
-        g.showGraph();
+        //Lexeme l = e.createEnv();
+        //e.insert(new Lexeme(VARIABLE, "a"), new Lexeme(INTEGER, 1), l);
+        //e.insert(new Lexeme(VARIABLE, "b"), new Lexeme(INTEGER, 2), l);
+        //GraphWriter g = new GraphWriter(l, "envTest");
+        //g.createGraph();
+        //g.showGraph();
+    }
+
+    public Evaluator() {
+        this.e = new Environment();
     }
 
     private boolean isTrue(Lexeme pt, Lexeme env) {
@@ -28,25 +34,38 @@ public class Evaluator {
     }
 
     Lexeme eval (Lexeme tree, Lexeme env) {
+        if (tree == null) {
+            return null;
+        }
         switch (tree.type) {
             case INTEGER: return tree;
             case STRING: return tree;
-            case DEF: return evalFuncDef(tree, env);
-            case VARIABLE: return lookupEnv(tree, env);
-            case GROUPING: return eval(tree.right, env);
-            case GT:
-
+            case DEF: return this.evalFuncDef(tree, env);
+            case VAR: return this.evalVarDef(tree, env);
+            case VAR_EXPR: return this.evalVarExpr(tree, env);
+            case VARIABLE: return this.e.lookupEnv(tree, env);
+            case LIST: return this.evalList(tree, env);
+            case RETURN: return this.evalReturn(tree, env);
+            case STATEMENT: return this.evalStatement(tree, env);
+            case GROUPING: this.eval(tree.right, env);
+            default:
+                Helpers.exitWithError("Type not found: " + tree.type);
         }
         return null;
     }
 
-    Lexeme evalProgram(Lexeme pt, Lexeme env) {
+    Lexeme evalStatement(Lexeme pt, Lexeme env) {
+        Lexeme val = null;
         while (pt != null) {
-            this.eval(pt.left, env);
+            val = this.eval(pt.left, env);
             pt = pt.right;
         }
+        return val;
+    }
 
-        return null;
+    Lexeme evalReturn(Lexeme pt, Lexeme env) {
+        Lexeme result = this.eval(pt.right, env);
+        return result;
     }
 
     Lexeme evalBlock(Lexeme pt, Lexeme env) {
@@ -62,8 +81,31 @@ public class Evaluator {
         Lexeme varName = pt.left;
         Lexeme varVal = pt.right;
         Lexeme init = this.eval(varVal, env);
-        this.insert(varName, init, env);
-        return init;
+        this.e.insert(varName, init, env);
+        return null;
+    }
+
+    Lexeme evalVarExpr(Lexeme pt, Lexeme env) {
+        if (pt.right == null) {
+            return this.e.lookupEnv(pt.left, env);
+        }
+
+        return this.evalCall(pt, env);
+    }
+
+    Lexeme evalList(Lexeme pt, Lexeme env) {
+        Lexeme result = new Lexeme(LIST);
+        Lexeme resultPtr = result;
+        while (pt != null) {
+            resultPtr.left = this.eval(pt.left, env);
+            pt = pt.right;
+            if (pt != null) {
+                resultPtr.right = new Lexeme(LIST);
+                resultPtr = resultPtr.right;
+            }
+        }
+
+        return result;
     }
 
     Lexeme evalMathExpr(Lexeme pt, Lexeme env) {
@@ -105,50 +147,20 @@ public class Evaluator {
     Lexeme evalFuncDef(Lexeme pt, Lexeme env) {
         Lexeme closure = Lexeme.cons(CLOSURE, env, pt);
         // Insert function name
-        this.insert(env, pt.left, closure);
+        //GraphWriter.quickGraph(closure, "closure");
+        this.e.insert(pt.left, closure, env);
         return null;
     }
 
     Lexeme evalCall(Lexeme pt, Lexeme env) {
-        Lexeme closure = this.lookupEnv(env, pt.left);
+        Lexeme closure = this.eval(pt.left, env);
+        //GraphWriter.quickGraph(closure, "closure");
         Lexeme args = pt.right;
-        //Lexeme params = closure.
-        return null;
-    }
-
-    Lexeme extendEnv(Lexeme env, Lexeme variables, Lexeme values) {
-        return Lexeme.cons(ENV, makeTable(variables, values), env);
-    }
-
-    Lexeme createEnv() {
-        return extendEnv(null, null, null);
-    }
-
-    Lexeme makeTable(Lexeme variables, Lexeme values) {
-        return Lexeme.cons(TABLE, variables, values);
-    }
-
-    Lexeme lookupEnv(Lexeme env, Lexeme variable) {
-        while (env != null) {
-            Lexeme table = env.left;
-            Lexeme vars = table.left;
-            Lexeme vals = table.right;
-            while (vars != null) {
-                if (variable.equals(vars.left)) {
-                    return vals.left;
-                }
-                vars = vars.right;
-                vals = vals.right;
-            }
-        }
-
-        return null;
-    }
-
-    Lexeme insert(Lexeme variable, Lexeme value, Lexeme env) {
-        Lexeme table = env.left;
-        table.left = Lexeme.cons(GLUE, variable, table.left);
-        table.right = Lexeme.cons(GLUE, value, table.right);
-        return value;
+        Lexeme params = Helpers.varExprsToVarList(closure.right.right.left);
+        Lexeme eargs = this.eval(args, env);
+        Lexeme denv = closure.left;
+        Lexeme xenv = e.extendEnv(denv, params, eargs);
+        Lexeme result = this.eval(closure.right.right.right, xenv);
+        return result;
     }
 }

@@ -2,6 +2,8 @@ package DPL;
 
 import java.util.HashMap;
 
+import static DPL.TokenType.*;
+
 /**
  * Created by aschey on 10/18/16.
  */
@@ -26,5 +28,20 @@ public class Helpers {
 
     static TokenType stringToTokenType(String tokenString) {
         return TokenType.valueOf(tokenString.toUpperCase());
+    }
+
+    static Lexeme varExprsToVarList(Lexeme varExprs) {
+        Lexeme result = new Lexeme(GLUE);
+        Lexeme resultPtr = result;
+        resultPtr.left = varExprs.left.left;
+        varExprs = varExprs.right;
+        while (varExprs != null) {
+            resultPtr.right = new Lexeme(GLUE);
+            resultPtr.right.left = varExprs.left.left;
+            resultPtr = resultPtr.right;
+            varExprs = varExprs.right;
+        }
+
+        return result;
     }
 }

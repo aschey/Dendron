@@ -39,7 +39,7 @@ public class Lexer {
         }
         this.lineIsComment = false;
 
-        this.keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true", "false"));
+        this.keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true", "false", "return"));
 
         this.symbols = Helpers.mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
             PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '=', ASSIGN, '/', SLASH);

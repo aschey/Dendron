@@ -27,6 +27,12 @@ class GraphWriter {
         this.tree = tree;
     }
 
+    static void quickGraph(Lexeme tree, String name) {
+        GraphWriter g = new GraphWriter(tree, name);
+        g.createGraph();
+        g.showGraph();
+    }
+
     void showGraph() {
         try {
             Runtime current = Runtime.getRuntime();

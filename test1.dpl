@@ -36,6 +36,8 @@ def f[a b]
 
 def g[b c]
 [
+	var a = 2;
+	return a;
 ]
 
 var a = 2 + 2;

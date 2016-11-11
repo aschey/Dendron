@@ -115,6 +115,14 @@ public class Recognizer {
                 this.printToken("false");
                 break;
             }
+
+            case RETURN: {
+                this.printToken("return");
+                this.prettyPrint(tree.right);
+                this.printToken(";");
+                System.out.println();
+                break;
+            }
             case STRING: {
                 this.printToken("\"" + tree.str + "\"");
                 break;
@@ -326,6 +334,15 @@ public class Recognizer {
         return tree;
     }
 
+    private Lexeme returnVal() {
+        printMethod("returnVal");
+        Lexeme tree = this.match(RETURN);
+        tree.right = this.expression();
+        this.match(SEMICOLON);
+
+        return tree;
+    }
+
     private Lexeme block() {
         printMethod("block");
         Lexeme tree = null;
@@ -378,6 +395,12 @@ public class Recognizer {
 
         if (this.functionDefPending()) {
             Lexeme l = this.functionDef();
+            traverse(l);
+            return l;
+        }
+
+        if (this.returnPending()) {
+            Lexeme l = this.returnVal();
             traverse(l);
             return l;
         }
@@ -503,8 +526,11 @@ public class Recognizer {
         return this.check(FOR);
     }
 
+    private boolean returnPending() { return this.check(RETURN); }
+
     private boolean statementPending() {
-        return this.expressionPending() || this.ifStatementPending() || this.whileLoopPending() || this.forLoopPending() || this.varPending() || this.functionDefPending();
+        return this.expressionPending() || this.ifStatementPending() || this.whileLoopPending() || this.forLoopPending() ||
+            this.varPending() || this.functionDefPending() || this.returnPending();
     }
 
     private boolean varPending() {

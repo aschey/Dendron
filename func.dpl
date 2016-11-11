@@ -1,6 +1,7 @@
 def f[a b]
 [
     var c = 2;
+    return b;
 ]
 
-f[1 2];
+f[1 3];
