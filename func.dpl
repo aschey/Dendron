@@ -1,22 +1,3 @@
-def a[z] [
-	def f[] [
-		return 3;
-	]
-	z.q = f;
-	println[z.q[]];
-]
 
-`var b = a[null null null];
-var b = obj [
-	var q = 4;
-	var z = obj [
-		def x[] [
-			return true;
-		]
-		return this;
-	];
-	return this;
-];
-
-println[b.z.x[]];
-
+a = 2;
+println[a];

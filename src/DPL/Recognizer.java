@@ -505,6 +505,16 @@ public class Recognizer {
             tree.left = var;
             tree.right = this.optParamList();
             this.match(C_BRACKET);
+            if (this.check(DOT)) {
+                this.advance();
+                Lexeme newTree = new Lexeme(PROPERTY);
+                newTree.left = tree;
+                newTree.right = this.varExpression();
+
+                return newTree;
+            }
+
+            return tree;
         }
         else if (this.check(ASSIGN)) {
             tree = this.advance();
@@ -590,7 +600,7 @@ public class Recognizer {
     }
 
     private boolean unaryPending() {
-        return this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT }) || this.varExpressionPending();
+        return this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ }) || this.varExpressionPending();
     }
 
     private boolean varExpressionPending() {

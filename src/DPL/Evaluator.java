@@ -337,12 +337,19 @@ public class Evaluator {
 
     Lexeme evalProperty(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme obj = this.eval(pt.left, env);
+        if (obj.type != ENV) {
+            Helpers.exitWithError("attempting to retrieve property on variable of type " + obj.type);
+        }
         if (pt.right.type == ASSIGN) {
             // Evaluate the right hand side of the assignment in the calling environment
             Lexeme value = this.eval(pt.right.right, env);
             // Update the value in the object's environment
             this.e.updateEnv(pt.right.left, value, obj);
             return null;
+        }
+        if (pt.right.type == FUNC_CALL) {
+            Lexeme eargs = this.eval(pt.right.right, env);
+            return this.evalUserDefinedFuncCall(pt.right, eargs, obj);
         }
         return this.eval(pt.right, obj);
     }
