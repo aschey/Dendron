@@ -1,0 +1,189 @@
+def AvlNode[element left right] [
+    var height;
+    return this;
+]
+
+def AvlTree[] [
+    var root = null;
+
+    def insert[x] [
+        root = _insert[x root];
+    ]
+
+    def findMin[] [
+        return elementAt[_findMin[root]];
+    ]
+
+    def findMax[] [
+        return elementAt[_findMax[root]];
+    ]
+
+    def find[x] [
+        return elementAt[_find[x root]];
+    ]
+
+    def makeEmpty[] [
+        root = null;
+    ]
+
+    def isEmpty[] [
+        return root == null;
+    ]
+
+    def printTree[] [
+        if [isEmpty[]] [
+            println['Empty tree'];
+        ]
+        else [
+            _printTree[root];
+        ]
+    ]
+
+    def elementAt[t] [
+        if [t == null] [
+            return null;
+        ]
+        return t.element;
+    ]
+
+    def _insert[x t] [
+        if [t == null] [
+            t = AvlNode[x null null];
+        ]
+        else if [x < t.element] [
+            t.left = _insert[x t.left];
+            if [[_height[t.left] - _height[t.right]] == 2] [
+                if [x < t.left.element] [
+                    t = rotateWithLeftChild[t];
+                ]
+                else [
+                    t = doubleWithLeftChild[t];
+                ]
+            ]
+        ]
+        else if [x > t.element] [
+            t.right = _insert[x t.right];
+            if [[_height[t.right] - _height[t.left]] == 2] [
+                if [x > t.right.element] [
+                    t = rotateWithRightChild[t];
+                ]
+                else [
+                    t = doubleWithRightChild[t];
+                ]
+            ]
+        ]
+        
+        t.height = max[_height[t.left] _height[t.right]] + 1;
+        return t;
+    ]
+
+    def _findMin[t] [
+        if [t == null] [
+            return t;
+        ]
+
+        while [t.left != null] [
+            t = t.left;
+        ]
+
+        return t;
+    ]
+
+    def _findMax[t] [
+        if [t == null] [
+            return t;
+        ]
+
+        while [t.right != null] [
+            t = t.right;
+        ]
+
+        return t;
+    ]
+
+    def _find[x t] [
+        while [t != null] [
+            if [x < t.element] [
+                t = t.left;
+            ]
+            else if [x > t.element] [
+                t = t.right;
+            ]
+            else [
+                return t;
+            ]
+        ]
+
+        return null;
+    ]
+
+    def _printTree[t] [
+        if [t != null] [
+            _printTree[t.left];
+            println[t.element];
+            _printTree[t.right];
+        ]
+    ]
+
+    return this;
+]
+
+def _height[t] [
+    if [t == null] [
+        return -1;
+    ]
+
+    return t.height;
+]
+
+def max[lhs rhs] [
+    if [[lhs == null] and [rhs == null]] [
+        return 0;
+    ]
+    if [lhs == null] [
+        return rhs;
+    ]
+    if [rhs == null] [
+        return lhs;
+    ]
+    if [lhs > rhs] [
+        return lhs;
+    ]
+    return rhs;
+]
+
+def rotateWithLeftChild[k2] [
+    var k1 = k2.left;
+    k2.left = k1.right;
+    k1.right = k2;
+    k2.height = max[_height[k2.left] _height[k2.right]] + 1;
+    k1.height = max[_height[k1.left] k2.height] + 1;
+    return k1;
+]
+
+def rotateWithRightChild[k1] [
+    var k2 = k1.right;
+    k1.right = k2.left;
+    k2.left = k1;
+    k1.height = max[_height[k1.left] _height[k1.right]] + 1;
+    k2.height = max[_height[k2.right] k1.height] + 1;
+    return k2;
+]
+
+def doubleWithLeftChild[k3] [
+    k3.left = rotateWithRightChild[k3.left];
+    return rotateWithLeftChild[k3];
+]
+
+def doubleWithRightChild[k1] [
+    k1.right = rotateWithLeftChild[k1.right];
+    return rotateWithRightChild[k1];
+]
+
+var t = AvlTree[];
+
+t.insert[1];
+t.insert[2];
+t.insert[3];
+t.insert[-1];
+t.printTree[];

@@ -1,6 +1,8 @@
 package DPL;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static DPL.TokenType.*;
 
@@ -8,6 +10,23 @@ import static DPL.TokenType.*;
  * Created by aschey on 10/18/16.
  */
 public class Helpers {
+
+    static ArrayList<String> keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true",
+        "false", "return", "lambda", "obj", "this", "null", "and", "or"));
+
+    static HashMap<Character, TokenType> symbols = mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
+    PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '!', NOT, '=', ASSIGN, '/', SLASH, '.', DOT);
+
+    static HashMap<TokenType, String> binaryOpMappings = mapInitialize(
+        LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", SLASH, "/", AND, "and", OR, "or"
+    );
+
+    static TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
+
+    static TokenType[] mathOperators = new TokenType[] { PLUS, MINUS, STAR, SLASH };
+
+    static TokenType[] intsRequired = new TokenType[] { MINUS, STAR, SLASH };
+
     static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
         HashMap<T1, T2> result = new HashMap<>();
         for (int i = 0; i < args.length - 1; i += 2) {
@@ -30,18 +49,51 @@ public class Helpers {
         return TokenType.valueOf(tokenString.toUpperCase());
     }
 
-    static Lexeme varExprsToVarList(Lexeme varExprs) {
-        Lexeme result = new Lexeme(GLUE);
-        Lexeme resultPtr = result;
-        resultPtr.left = varExprs.left.left;
-        varExprs = varExprs.right;
-        while (varExprs != null) {
-            resultPtr.right = new Lexeme(GLUE);
-            resultPtr.right.left = varExprs.left.left;
-            resultPtr = resultPtr.right;
-            varExprs = varExprs.right;
+    static Lexeme listIndex(Lexeme list, int index) {
+        for (int i = 0; i < index; i++) {
+            list = list.right;
+        }
+        return list.left;
+    }
+
+    static int listLength(Lexeme list) {
+        int length = 0;
+        while (list != null) {
+            list = list.right;
+            length++;
         }
 
-        return result;
+        return length;
+    }
+
+    static boolean contains(TokenType[] search, Lexeme val) {
+        return Arrays.stream(search).anyMatch(t -> t.equals(val.type));
+    }
+
+    static Lexeme getFunction(Lexeme closure) {
+        if (closure.right.type.equals(LAMBDA)) {
+            return closure.right;
+        }
+        else {
+            return closure.right.right;
+        }
+    }
+
+    static Object getValWithDefault(Lexeme pt, String defaultVal) {
+        try {
+            return pt.getVal();
+        }
+        catch (NullPointerException ex) {
+            return defaultVal;
+        }
+    }
+
+    static TokenType getTypeIfExists(Lexeme pt) {
+        try {
+            return pt.type;
+        }
+        catch (NullPointerException ex) {
+            return null;
+        }
     }
 }

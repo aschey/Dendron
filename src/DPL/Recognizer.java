@@ -10,12 +10,6 @@ import static DPL.TokenType.*;
 public class Recognizer {
     private Lexeme currentLexeme;
     private Lexer lexer;
-    private HashMap<TokenType, String> binaryOpMappings = Helpers.mapInitialize(
-        LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", SLASH, "/"
-    );
-    private TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
-    //private TokenType[] binaryOperators = new TokenType[] { LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, SLASH };
-
 
     private static boolean toPrint = false;
     private static boolean toTraverse = false;
@@ -27,14 +21,12 @@ public class Recognizer {
     }
 
     public static void main(String[] args) {
-        Recognizer recognizer = new Recognizer("test1.dpl");
+        Recognizer recognizer = new Recognizer("func.dpl");
         Lexeme l = recognizer.statements();
         //recognizer.traverse(l);
-        GraphWriter t = new GraphWriter(l, "parseTree");
-        t.createGraph();
-        t.showGraph();
+        //GraphWriter.quickGraph(l, "func");
         //System.out.println(l.right.left.right.left.type);
-        recognizer.prettyPrint(l);
+        //recognizer.prettyPrint(l);
     }
 
     public Recognizer(String filename) {
@@ -70,10 +62,6 @@ public class Recognizer {
         }
     }
 
-    private boolean checkTypes(TokenType[] types, Lexeme tree) {
-        return Arrays.stream(types).anyMatch(t -> t.equals(tree.type));
-    }
-
     private void printToken(Object token) {
         System.out.print(token + " ");
     }
@@ -82,14 +70,13 @@ public class Recognizer {
         if (tree == null) {
             return;
         }
-
-        if (this.checkTypes(this.binaryOperators, tree)) {
-            this.printToken(this.binaryOpMappings.get(tree.type));
+        if (Helpers.contains(Helpers.binaryOperators, tree)) {
+            this.printToken(Helpers.binaryOpMappings.get(tree.type));
             return;
         }
 
-        if (this.checkTypes(new TokenType[] { FOR, WHILE, IF }, tree)) {
-            printToken(tree.type);
+        if (Helpers.contains(new TokenType[] { FOR, WHILE, IF }, tree)) {
+            printToken(tree.type.toString().toLowerCase());
             printToken("[");
             this.prettyPrint(tree.left);
             System.out.println("]");
@@ -107,15 +94,16 @@ public class Recognizer {
                 this.printToken(tree.str);
                 break;
             }
-            case TRUE: {
-                this.printToken("true");
+            case FOR: {
+                this.printToken("for");
+            }
+            case BOOLEAN: {
+                this.printToken(tree.str);
                 break;
             }
-            case FALSE: {
-                this.printToken("false");
-                break;
+            case NULL: {
+                this.printToken("null");
             }
-
             case RETURN: {
                 this.printToken("return");
                 this.prettyPrint(tree.right);
@@ -141,33 +129,67 @@ public class Recognizer {
                 }
                 break;
             }
-            case DEF: {
-                System.out.print("def ");
+            case LAMBDA: {
+                this.printToken("lambda");
+                this.printToken("[");
                 this.prettyPrint(tree.left);
-                System.out.print("[ ");
+                System.out.println("]");
+                System.out.println("[ ");
+                this.prettyPrint(tree.right);
+                this.printToken("]");
+                break;
+            }
+            case DEF: {
+                this.printToken("def");
+                this.prettyPrint(tree.left);
+                this.printToken("[");
                 this.prettyPrint(tree.right.left);
-                System.out.print("]");
+                this.printToken("]");
                 System.out.println();
                 System.out.println("[");
                 this.prettyPrint(tree.right.right);
                 System.out.println("]");
                 break;
             }
-            case VAR_EXPR: {
+            case FUNC_CALL: {
                 this.prettyPrint(tree.left);
-                if (tree.right != null) {
-                    this.printToken("[");
-                    this.prettyPrint(tree.right);
-                    System.out.print("]");
-                }
+                this.printToken("[");
+                this.prettyPrint(tree.right);
+                this.printToken("]");
                 break;
             }
+            case ASSIGN: {
+                this.prettyPrint(tree.left);
+                this.printToken("=");
+                this.prettyPrint(tree.right);
+                System.out.println(";");
+                break;
+            }
+
             case BINARY: {
                 this.prettyPrint(tree.right.left);
                 this.prettyPrint(tree.left);
                 this.prettyPrint(tree.right.right);
                 break;
             }
+
+            case ARRAY_DEF: {
+                this.printToken(".");
+                this.printToken("[");
+                this.prettyPrint(tree.right);
+                this.printToken("]");
+                break;
+            }
+
+            case ARRAY_ACCESS: {
+                this.printToken(".");
+                this.prettyPrint(tree.left);
+                this.printToken("[");
+                this.prettyPrint(tree.right);
+                this.printToken("]");
+                break;
+            }
+
             case STATEMENT: {
                 if (tree.left.type == IF) {
                     this.printToken(tree.left.type);
@@ -177,7 +199,7 @@ public class Recognizer {
                     System.out.println("[");
                     this.prettyPrint(tree.left.right.left);
                     System.out.println("]");
-                    if (tree.left.type == IF && tree.left.right.right.type == IF) {
+                    if (tree.left.type == IF && tree.left.right.right != null && tree.left.right.right.type == IF) {
                         this.printToken("ELSE");
                     }
                     this.prettyPrint(tree.left.right.right);
@@ -185,7 +207,7 @@ public class Recognizer {
                 else {
                     this.prettyPrint(tree.left);
                 }
-                if (tree.left.type == VAR || tree.left.type == VAR_EXPR) {
+                if (tree.left.type == VAR || tree.left.type == FUNC_CALL) {
                     System.out.println(";");
                 }
                 this.prettyPrint(tree.right);
@@ -219,7 +241,7 @@ public class Recognizer {
     }
 
     private boolean check(TokenType type) {
-        return this.currentLexeme.type.equals(type);
+        return this.currentLexeme.type == type;
     }
 
     private Lexeme advance() {
@@ -272,7 +294,7 @@ public class Recognizer {
     private Lexeme unary() {
         printMethod("unary");
         Lexeme tree;
-        if (this.checkMultiple(new TokenType[] {INTEGER, STRING, TRUE, FALSE})) {
+        if (this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, NULL})) {
             Lexeme l = this.advance();
             traverse(l);
             return l;
@@ -285,11 +307,27 @@ public class Recognizer {
             traverse(tree);
             return tree;
         }
+        else if (this.check(NOT)) {
+            tree = new Lexeme(NOT);
+            this.advance();
+            tree.right = this.unary();
+            traverse(tree);
+            return tree;
+        }
         else if (this.check(O_BRACKET)) {
             this.advance();
             tree = new Lexeme(GROUPING);
             tree.right = this.expression();
             this.match(C_BRACKET);
+        }
+        else if (this.check(LAMBDA)) {
+            tree = this.lambda();
+        }
+        else if (this.arrayPending()) {
+            tree = this.array();
+        }
+        else if (this.objPending()) {
+            tree = this.obj();
         }
         else {
             tree = this.varExpression();
@@ -337,7 +375,12 @@ public class Recognizer {
     private Lexeme returnVal() {
         printMethod("returnVal");
         Lexeme tree = this.match(RETURN);
-        tree.right = this.expression();
+        if (this.check(THIS)) {
+            tree.right = this.advance();
+        }
+        else if (this.expressionPending()) {
+            tree.right = this.expression();
+        }
         this.match(SEMICOLON);
 
         return tree;
@@ -349,9 +392,6 @@ public class Recognizer {
         this.match(O_BRACKET);
         if (this.statementPending()) {
             tree = this.statements();
-        //traverse(tree);
-        //System.out.println();
-            //System.out.println(tree.getVal());
         }
         this.match(C_BRACKET);
         traverse(tree);
@@ -450,20 +490,37 @@ public class Recognizer {
 
     private Lexeme binaryOperator() {
         printMethod("binaryOperator");
-        Lexeme l = this.matchMultiple(this.binaryOperators);
+        Lexeme l = this.matchMultiple(Helpers.binaryOperators);
         traverse(l);
         return l;
     }
 
     private Lexeme varExpression() {
         printMethod("varExpression");
-        Lexeme tree = new Lexeme(VAR_EXPR);
-        tree.left = this.match(VARIABLE);
+        Lexeme var = this.match(VARIABLE);
+        Lexeme tree;
         if (this.check(O_BRACKET)) {
+            tree = new Lexeme(FUNC_CALL);
             this.advance();
+            tree.left = var;
             tree.right = this.optParamList();
             this.match(C_BRACKET);
         }
+        else if (this.check(ASSIGN)) {
+            tree = this.advance();
+            tree.left = var;
+            tree.right = this.expression();
+        }
+        else if (this.check(DOT)) {
+            this.advance();
+            tree = new Lexeme(PROPERTY);
+            tree.left = var;
+            tree.right = this.varExpression();
+        }
+        else {
+            tree = var;
+        }
+
         traverse(tree);
         return tree;
     }
@@ -490,8 +547,42 @@ public class Recognizer {
         return tree;
     }
 
+    private Lexeme lambda() {
+        printMethod("lambda");
+        Lexeme tree = this.match(LAMBDA);
+        this.match(O_BRACKET);
+        tree.left = this.optParamList();
+        this.match(C_BRACKET);
+        tree.right = this.block();
+        return tree;
+    }
+
+    private Lexeme array() {
+        this.match(DOT);
+        Lexeme tree;
+        if (this.check(O_BRACKET)) {
+            this.advance();
+            tree = new Lexeme(ARRAY_DEF);
+            tree.right = this.optParamList();
+        }
+        else {
+            tree = new Lexeme(ARRAY_ACCESS);
+            tree.left = this.match(VARIABLE);
+            this.match(O_BRACKET);
+            tree.right = this.expression();
+        }
+        this.match(C_BRACKET);
+        return tree;
+    }
+
+    private Lexeme obj() {
+        Lexeme tree = this.match(OBJ);
+        tree.right = this.block();
+        return tree;
+    }
+
     private boolean binaryOperatorPending() {
-        return this.checkMultiple(this.binaryOperators);
+        return this.checkMultiple(Helpers.binaryOperators);
     }
 
     private boolean expressionPending() {
@@ -499,16 +590,14 @@ public class Recognizer {
     }
 
     private boolean unaryPending() {
-        return this.checkMultiple(new TokenType[] {INTEGER, STRING, O_BRACKET, MINUS }) || this.varExpressionPending();
+        return this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT }) || this.varExpressionPending();
     }
-
-//    private boolean binaryExprPending() {
-//        return this.unaryPending();
-//    }
 
     private boolean varExpressionPending() {
         return this.check(VARIABLE);
     }
+
+    private boolean arrayPending() { return this.check(DOT); }
 
     private boolean listPending() {
         return this.unaryPending();
@@ -530,12 +619,14 @@ public class Recognizer {
 
     private boolean statementPending() {
         return this.expressionPending() || this.ifStatementPending() || this.whileLoopPending() || this.forLoopPending() ||
-            this.varPending() || this.functionDefPending() || this.returnPending();
+            this.varPending() || this.functionDefPending() || this.returnPending() || this.objPending();
     }
 
     private boolean varPending() {
         return this.check(VAR);
     }
+
+    private boolean objPending() { return this.check(OBJ); }
 
     private boolean functionDefPending() {
         return this.check(DEF);

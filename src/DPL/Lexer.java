@@ -17,11 +17,9 @@ import static DPL.TokenType.*;
 public class Lexer {
     private PushbackInputStream reader;
     private boolean lineIsComment;
-    private ArrayList<String> keywords;
-    private HashMap<Character, DPL.TokenType> symbols;
 
     public static void main(String[] args) {
-        Lexer lexer = new Lexer("test1.dpl");
+        Lexer lexer = new Lexer("dictionary.dpl");
         Lexeme token = lexer.lex();
         while (token.type != END_OF_INPUT) {
             System.out.println(token.type + " " + token.str + " " + token.integer);
@@ -38,11 +36,6 @@ public class Lexer {
             System.out.println("File not found");
         }
         this.lineIsComment = false;
-
-        this.keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true", "false", "return"));
-
-        this.symbols = Helpers.mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
-            PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '=', ASSIGN, '/', SLASH);
     }
 
     private char read() {
@@ -123,9 +116,12 @@ public class Lexer {
     }
 
     private Lexeme lexVariableOrKeyword() {
-        String token = this.getTokenWithPredicate((Character ch) -> Character.isAlphabetic(ch) || Character.isDigit(ch));
-        if (!this.keywords.contains(token)) {
+        String token = this.getTokenWithPredicate((Character ch) -> Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '_');
+        if (!Helpers.keywords.contains(token)) {
             return new Lexeme(VARIABLE, token);
+        }
+        else if (token.equals("true") || token.equals("false")) {
+            return new Lexeme(BOOLEAN, Boolean.parseBoolean(token));
         }
 
         return new Lexeme(Helpers.stringToTokenType(token));
@@ -154,22 +150,22 @@ public class Lexer {
             return new Lexeme(END_OF_INPUT);
         }
 
-        if (this.symbols.containsKey(ch)) {
-            if (ch == '>' || ch == '<' || ch == '=') {
+        if (Helpers.symbols.containsKey(ch)) {
+            if (ch == '>' || ch == '<' || ch == '=' || ch == '!') {
                 Lexeme symbol = this.lexCompoundSymbol(ch);
                 if (symbol.type != NONE) {
                     return symbol;
                 }
             }
 
-            return new Lexeme(this.symbols.get(ch));
+            return new Lexeme(Helpers.symbols.get(ch));
         }
 
         if (Character.isDigit(ch)) {
             this.putBack(ch);
             return lexDigit();
         }
-        else if (Character.isAlphabetic(ch)) {
+        else if (Character.isAlphabetic(ch) || ch == '_') {
             this.putBack(ch);
             return lexVariableOrKeyword();
         }

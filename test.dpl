@@ -22,7 +22,7 @@ def f[a b]
     [
     ]
 
-    var b = [a b];
+    var b = .[a b];
     *b[0];
     *b[0] = 2;
 
@@ -30,6 +30,16 @@ def f[a b]
     *c[4];
 ]
 
+var test = obj
+[
+	var a = 2;
+	def b[a]
+	[
+		return a;
+	]
+];
+
+test.a;
 
 
 `this is a comment

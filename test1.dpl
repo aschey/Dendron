@@ -41,6 +41,7 @@ def g[b c]
 ]
 
 var a = 2 + 2;
+a = 3 + 3;
 var b;
 
 

@@ -3,7 +3,7 @@
  */
 package DPL;
 
-public enum TokenType {
+enum TokenType {
     O_BRACKET,
     C_BRACKET,
     COMMA,
@@ -15,27 +15,31 @@ public enum TokenType {
     ASSIGN,
     STAR,
     SLASH,
+    DOT,
     LT,
     GT,
     LEQ,
     GEQ,
     EQ,
+    NOT,
     NEQ,
+    AND,
+    OR,
     VAR,
     DEF,
     VARIABLE,
     INTEGER,
     STRING,
-    TRUE,
-    FALSE,
+    BOOLEAN,
+    NULL,
     IF,
     ELSE,
     FOR,
     WHILE,
     RETURN,
     BINARY,
+    FUNC_CALL,
     GLUE,
-    VAR_EXPR,
     STATEMENT,
     GROUPING,
     LIST,
@@ -44,5 +48,12 @@ public enum TokenType {
     END_OF_INPUT,
     ENV,
     TABLE,
-    CLOSURE
+    CLOSURE,
+    LAMBDA,
+    ARRAY_DEF,
+    ARRAY_ACCESS,
+    ARRAY,
+    OBJ,
+    THIS,
+    PROPERTY
 }
