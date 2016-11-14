@@ -445,6 +445,12 @@ public class Recognizer {
             return l;
         }
 
+        if (this.importPending()) {
+            Lexeme l = this.importFile();
+            traverse(l);
+            return l;
+        }
+
         Lexeme tree = this.expression();
         this.match(SEMICOLON);
         traverse(tree);
@@ -591,6 +597,14 @@ public class Recognizer {
         return tree;
     }
 
+    private Lexeme importFile() {
+        this.match(IMPORT);
+        String filename = this.match(STRING).str;
+        Recognizer r = new Recognizer(filename);
+        Lexeme tree = r.recognize();
+        return tree;
+    }
+
     private boolean binaryOperatorPending() {
         return this.checkMultiple(Helpers.binaryOperators);
     }
@@ -600,11 +614,7 @@ public class Recognizer {
     }
 
     private boolean unaryPending() {
-        return this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ }) || this.varExpressionPending();
-    }
-
-    private boolean varExpressionPending() {
-        return this.check(VARIABLE);
+        return this.checkMultiple(Helpers.unaries);
     }
 
     private boolean arrayPending() { return this.check(DOT); }
@@ -627,9 +637,13 @@ public class Recognizer {
 
     private boolean returnPending() { return this.check(RETURN); }
 
+    private boolean importPending() {
+        return this.check(IMPORT);
+    }
+
     private boolean statementPending() {
         return this.expressionPending() || this.ifStatementPending() || this.whileLoopPending() || this.forLoopPending() ||
-            this.varPending() || this.functionDefPending() || this.returnPending() || this.objPending();
+            this.varPending() || this.functionDefPending() || this.returnPending() || this.objPending() || this.importPending();
     }
 
     private boolean varPending() {

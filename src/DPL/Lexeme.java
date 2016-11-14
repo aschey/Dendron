@@ -67,6 +67,9 @@ class Lexeme {
         else if (this.bool != null) {
             return this.bool;
         }
+        else if (this.array != null) {
+            return this.array;
+        }
         else {
             return this.type;
         }

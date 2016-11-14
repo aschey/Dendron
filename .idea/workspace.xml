@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="78c25255-bb14-4e6b-8523-c64445f3662b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DPL/DPL/Lexeme.class" afterPath="$PROJECT_DIR$/out/production/DPL/DPL/Lexeme.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DPL/DPL/Recognizer.class" afterPath="$PROJECT_DIR$/out/production/DPL/DPL/Recognizer.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/DPL/DPL/TokenType.class" afterPath="$PROJECT_DIR$/out/production/DPL/DPL/TokenType.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dictionary.dpl" afterPath="$PROJECT_DIR$/dictionary.dpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/func.dot" afterPath="$PROJECT_DIR$/func.dot" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/func.dpl" afterPath="$PROJECT_DIR$/func.dpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/func.eps" afterPath="$PROJECT_DIR$/func.eps" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Evaluator.java" afterPath="$PROJECT_DIR$/src/DPL/Evaluator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Helpers.java" afterPath="$PROJECT_DIR$/src/DPL/Helpers.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Lexeme.java" afterPath="$PROJECT_DIR$/src/DPL/Lexeme.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/Recognizer.java" afterPath="$PROJECT_DIR$/src/DPL/Recognizer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DPL/TokenType.java" afterPath="$PROJECT_DIR$/src/DPL/TokenType.java" />
     </list>
     <ignored path="DPL.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,21 +35,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Lexer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Lexer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="83" column="17" selection-start-line="83" selection-start-column="17" selection-end-line="83" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DPL.iml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DPL.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="252">
+              <caret line="32" column="81" selection-start-line="32" selection-start-column="81" selection-end-line="32" selection-end-column="81" />
               <folding />
             </state>
           </provider>
@@ -55,8 +48,8 @@
       <file leaf-file-name="Lexeme.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+            <state relative-caret-position="1224">
+              <caret line="70" column="30" selection-start-line="70" selection-start-column="30" selection-end-line="70" selection-end-column="30" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -67,17 +60,11 @@
       <file leaf-file-name="Recognizer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Recognizer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="340" column="0" selection-start-line="340" selection-start-column="0" selection-end-line="340" selection-end-column="0" />
+            <state relative-caret-position="7002">
+              <caret line="395" column="0" selection-start-line="395" selection-start-column="0" selection-end-line="395" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#1633#1634#0" expanded="true" />
-                <element signature="e#1678#1679#0" expanded="true" />
-                <element signature="e#16730#16731#0" expanded="true" />
-                <element signature="e#16772#16773#0" expanded="true" />
-                <element signature="e#17164#17165#0" expanded="true" />
-                <element signature="e#17206#17207#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,18 +73,18 @@
       <file leaf-file-name="GraphWriter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/GraphWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2">
+            <state relative-caret-position="18">
               <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Evaluator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DPL/Evaluator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+            <state relative-caret-position="306">
+              <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,12 +105,9 @@
       <file leaf-file-name="Environment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Environment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-164">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-              <folding>
-                <element signature="e#391#392#0" expanded="true" />
-                <element signature="e#441#442#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="155">
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -131,8 +115,8 @@
       <file leaf-file-name="Helpers.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/Helpers.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+            <state relative-caret-position="234">
+              <caret line="25" column="99" selection-start-line="25" selection-start-column="99" selection-end-line="25" selection-end-column="99" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -140,11 +124,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Interpreter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DPL/Interpreter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="TokenType.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
+            <state relative-caret-position="232">
+              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -179,12 +173,13 @@
         <option value="$PROJECT_DIR$/src/DPL/Table.java" />
         <option value="$PROJECT_DIR$/src/DPL/GraphWriter.java" />
         <option value="$PROJECT_DIR$/src/DPL/ReturnEncounteredException.java" />
+        <option value="$PROJECT_DIR$/src/DPL/Environment.java" />
+        <option value="$PROJECT_DIR$/src/DPL/Recognizer.java" />
         <option value="$PROJECT_DIR$/src/DPL/Lexeme.java" />
+        <option value="$PROJECT_DIR$/src/DPL/Interpreter.java" />
         <option value="$PROJECT_DIR$/src/DPL/Lexer.java" />
         <option value="$PROJECT_DIR$/src/DPL/TokenType.java" />
         <option value="$PROJECT_DIR$/src/DPL/Helpers.java" />
-        <option value="$PROJECT_DIR$/src/DPL/Environment.java" />
-        <option value="$PROJECT_DIR$/src/DPL/Recognizer.java" />
         <option value="$PROJECT_DIR$/src/DPL/Evaluator.java" />
       </list>
     </option>
@@ -211,7 +206,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -224,14 +219,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane />
-      </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
@@ -554,18 +542,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DPL/Evaluator.java</url>
-          <line>145</line>
+          <line>315</line>
           <properties />
-          <option name="timeStamp" value="213" />
+          <option name="timeStamp" value="220" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DPL/Evaluator.java</url>
-          <line>338</line>
+          <line>353</line>
           <properties />
-          <option name="timeStamp" value="215" />
+          <option name="timeStamp" value="225" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="216" />
+      <option name="time" value="227" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -574,14 +562,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3204">
@@ -601,7 +581,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -622,12 +601,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -659,7 +632,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -680,12 +652,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -717,7 +683,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -738,12 +703,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -775,7 +734,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -796,12 +754,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -833,7 +785,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -854,12 +805,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -891,7 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -912,12 +856,6 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -941,7 +879,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -960,42 +897,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Table.java" />
-    <entry file="file://$PROJECT_DIR$/src/DPL/GraphWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/Helpers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/ReturnEncounteredException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1004,49 +905,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/Environment.java">
+    <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-164">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="252">
+          <caret line="32" column="81" selection-start-line="32" selection-start-column="81" selection-end-line="32" selection-end-column="81" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Lexeme.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="70" column="30" selection-start-line="70" selection-start-column="30" selection-end-line="70" selection-end-column="30" />
           <folding>
-            <element signature="e#391#392#0" expanded="true" />
-            <element signature="e#441#442#0" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/GraphWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/TokenType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Helpers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="25" column="99" selection-start-line="25" selection-start-column="99" selection-end-line="25" selection-end-column="99" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Recognizer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="340" column="0" selection-start-line="340" selection-start-column="0" selection-end-line="340" selection-end-column="0" />
+        <state relative-caret-position="7002">
+          <caret line="395" column="0" selection-start-line="395" selection-start-column="0" selection-end-line="395" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1678#1679#0" expanded="true" />
-            <element signature="e#16730#16731#0" expanded="true" />
-            <element signature="e#16772#16773#0" expanded="true" />
-            <element signature="e#17164#17165#0" expanded="true" />
-            <element signature="e#17206#17207#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Interpreter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="42" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DPL/Environment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DPL/Evaluator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+        <state relative-caret-position="306">
+          <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DPL/Lexer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="83" column="17" selection-start-line="83" selection-start-column="17" selection-end-line="83" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>

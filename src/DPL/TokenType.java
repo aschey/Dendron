@@ -15,6 +15,8 @@ enum TokenType {
     ASSIGN,
     STAR,
     SLASH,
+    CARAT,
+    REMAINDER,
     DOT,
     LT,
     GT,
@@ -55,5 +57,6 @@ enum TokenType {
     ARRAY,
     OBJ,
     THIS,
-    PROPERTY
+    PROPERTY,
+    IMPORT
 }
