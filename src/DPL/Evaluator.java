@@ -302,11 +302,11 @@ public class Evaluator {
         return Lexeme.cons(CLOSURE, env, pt);
     }
 
-    Lexeme evalArrayDef(Lexeme pt, Lexeme env) {
+    Lexeme evalArrayDef(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme arrayVals = pt.right;
         ArrayList<Lexeme> array = new ArrayList<>();
         while (arrayVals != null) {
-            array.add(arrayVals.left);
+            array.add(this.eval(arrayVals.left, env));
             arrayVals = arrayVals.right;
         }
         return new Lexeme(ARRAY, array);
