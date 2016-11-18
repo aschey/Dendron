@@ -1,4 +1,4 @@
-all: TokenType.class Lexeme.class Helpers.class Lexer.class Recognizer.class ReturnEncounteredException.class Environment.class Evaluator.class Interpreter.class
+all: TokenType.class Lexeme.class Helpers.class InputType.class Lexer.class Recognizer.class ReturnEncounteredException.class Environment.class Evaluator.class InterpreterSecurityManager.class Interpreter.class
 
 TokenType.class: TokenType.java
 	javac -d . -classpath . TokenType.java
@@ -8,6 +8,9 @@ Lexeme.class: Lexeme.java
 	
 Helpers.class: Helpers.java
 	javac -d . -classpath . Helpers.java
+	
+InputType.class: InputType.java
+	javac -d . -classpath . InputType.java
 	
 Lexer.class: Lexer.java
 	javac -d . -classpath . Lexer.java
@@ -26,3 +29,55 @@ Evaluator.class: Evaluator.java
 
 Interpreter.class: Interpreter.java
 	javac -d . -classpath . Interpreter.java
+	
+InterpreterSecurityManager.class: InterpreterSecurityManager.java
+	javac -d . -classpath . InterpreterSecurityManager.java
+
+# Examples
+error1: examples/error1.den
+	cat examples/error1.den
+
+error1x: examples/error1.den
+	dpl examples/error1.den
+
+error2: examples/error2.den
+	cat examples/error2.den
+
+error2x: examples/error2.den
+	dpl examples/error2.den
+
+error3: examples/error3.den
+	cat examples/error3.den
+
+error3x: examples/error3.den
+	dpl examples/error3.den
+	
+arrays: examples/arrays.den
+	cat examples/arrays.den
+
+arraysx: examples/arrays.den
+	dpl examples/arrays.den
+	
+conditionals: examples/conditions.den
+	cat examples/conditionals.den
+
+conditionalsx: examples/conditionals.den
+	dpl examples/conditionals.den
+	
+recursion: examples/recursion.den
+	cat examples/recursion.den
+
+recursionx: examples/recursion.den
+	dpl examples/recursion.den
+	
+iteration: examples/iteration.den
+	cat examples/error2.den
+
+iterationx: examples/iteration.den
+	dpl examples/iteration.den
+	
+dictionary: examples/error2.den
+	cat examples/dictionary.den
+
+dictionaryx: examples/error2.den
+	dpl examples/dictionary.den

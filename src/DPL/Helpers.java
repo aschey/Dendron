@@ -43,6 +43,10 @@ public class Helpers {
         System.exit(errorCode);
     }
 
+    static void exitIfNotStringOrArray(String funcName) {
+        exitWithError(funcName + " can only be called on strings and arrays");
+    }
+
     static void exitWithError(String error) {
         exitWithError(error, 1);
     }
@@ -56,6 +60,15 @@ public class Helpers {
             list = list.right;
         }
         return list.left;
+    }
+
+    static Lexeme optionalListIndex(Lexeme list, int index) {
+        try {
+            return listIndex(list, index);
+        }
+        catch (NullPointerException ex) {
+            return null;
+        }
     }
 
     static int listLength(Lexeme list) {
@@ -116,8 +129,11 @@ public class Helpers {
         }
     }
 
-    enum InputType {
-        FILE,
-        STDIN
+    static String removeStringRange(String str, int start, int end) {
+        return str.substring(0, start) + str.substring(end, str.length());
+    }
+
+    static String insertStringRange(String str, String newStr, int start) {
+        return str.substring(0, start) + newStr + str.substring(start, str.length());
     }
 }

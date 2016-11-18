@@ -1,0 +1,3 @@
+` Illustrates a missing semicolon error
+
+var a = 2

@@ -26,3 +26,52 @@ Evaluator.class: Evaluator.java
 
 Interpreter.class: Interpreter.java
 	javac -d . -classpath . Interpreter.java
+
+# Examples
+error1: examples/error1.den
+	cat examples/error1.den
+
+error1x: examples/error1.den
+	dpl examples/error1.den
+
+error2: examples/error2.den
+	cat examples/error2.den
+
+error2x: examples/error2.den
+	dpl examples/error2.den
+
+error3: examples/error3.den
+	cat examples/error3.den
+
+error3x: examples/error3.den
+	dpl examples/error3.den
+	
+arrays: examples/arrays.den
+	cat examples/arrays.den
+
+arraysx: examples/arrays.den
+	dpl examples/arrays.den
+	
+conditionals: examples/conditions.den
+	cat examples/conditionals.den
+
+conditionalsx: examples/conditionals.den
+	dpl examples/conditionals.den
+	
+recursion: examples/recursion.den
+	cat examples/recursion.den
+
+recursionx: examples/recursion.den
+	dpl examples/recursion.den
+	
+iteration: examples/iteration.den
+	cat examples/error2.den
+
+iterationx: examples/iteration.den
+	dpl examples/iteration.den
+	
+dictionary: examples/error2.den
+	cat examples/dictionary.den
+
+dictionaryx: examples/error2.den
+	dpl examples/dictionary.den

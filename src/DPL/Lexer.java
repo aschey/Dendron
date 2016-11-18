@@ -22,7 +22,7 @@ public class Lexer {
     }
 
 
-    public Lexer(String input, Helpers.InputType inputType) {
+    public Lexer(String input, InputType inputType) {
         try {
             switch (inputType) {
                 case FILE:

@@ -1,0 +1,7 @@
+` Array declaration
+var a = .[1 2 3];
+println[a];
+
+` Array manipulation
+append[a 4];
+println[a];

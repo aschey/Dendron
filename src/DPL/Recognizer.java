@@ -29,7 +29,7 @@ public class Recognizer {
         //recognizer.prettyPrint(l);
     }
 
-    public Recognizer(String input, Helpers.InputType inputType) {
+    public Recognizer(String input, InputType inputType) {
         this.lexer = new Lexer(input, inputType);
         this.currentLexeme = this.lexer.lex();
     }
@@ -295,24 +295,23 @@ public class Recognizer {
         printMethod("unary");
         Lexeme tree;
         if (this.checkMultiple(new TokenType[] {INTEGER, STRING, BOOLEAN, NULL})) {
-            Lexeme l = this.advance();
-            traverse(l);
-            return l;
+            tree = this.advance();
+            traverse(tree);
+            //return l;
         }
-
-        if (this.check(MINUS)) {
+        else if (this.check(MINUS)) {
             tree = new Lexeme(NEGATIVE);
             this.advance();
             tree.right = this.unary();
             traverse(tree);
-            return tree;
+            //return tree;
         }
         else if (this.check(NOT)) {
             tree = new Lexeme(NOT);
             this.advance();
             tree.right = this.unary();
             traverse(tree);
-            return tree;
+            //return tree;
         }
         else if (this.check(O_BRACKET)) {
             this.advance();
@@ -331,6 +330,10 @@ public class Recognizer {
         }
         else {
             tree = this.varExpression();
+        }
+
+        if (this.propertyPending()) {
+            tree = this.property(tree);
         }
         traverse(tree);
         return tree;
@@ -511,13 +514,8 @@ public class Recognizer {
             tree.left = var;
             tree.right = this.optParamList();
             this.match(C_BRACKET);
-            if (this.check(DOT)) {
-                this.advance();
-                Lexeme newTree = new Lexeme(PROPERTY);
-                newTree.left = tree;
-                newTree.right = this.varExpression();
-
-                return newTree;
+            if (this.propertyPending()) {
+                tree = this.property(tree);
             }
 
             return tree;
@@ -528,16 +526,21 @@ public class Recognizer {
             tree.right = this.expression();
         }
         else if (this.check(DOT)) {
-            this.advance();
-            tree = new Lexeme(PROPERTY);
-            tree.left = var;
-            tree.right = this.varExpression();
+            tree = this.property(var);
         }
         else {
             tree = var;
         }
 
         traverse(tree);
+        return tree;
+    }
+
+    private Lexeme property(Lexeme obj) {
+        this.advance();
+        Lexeme tree = new Lexeme(PROPERTY);
+        tree.left = obj;
+        tree.right = this.varExpression();
         return tree;
     }
 
@@ -600,7 +603,7 @@ public class Recognizer {
     private Lexeme importFile() {
         this.match(IMPORT);
         String filename = this.match(STRING).str;
-        Recognizer r = new Recognizer(filename, Helpers.InputType.FILE);
+        Recognizer r = new Recognizer(filename, InputType.FILE);
         Lexeme tree = r.recognize();
         return tree;
     }
@@ -654,6 +657,10 @@ public class Recognizer {
 
     private boolean functionDefPending() {
         return this.check(DEF);
+    }
+
+    private boolean propertyPending() {
+        return this.check(DOT);
     }
 }
 
