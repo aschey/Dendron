@@ -1,4 +1,4 @@
-all: TokenType.class Lexeme.class Helpers.class Lexer.class Recognizer.class ReturnEncounteredException.class Environment.class Evaluator.class Interpreter.class
+all: TokenType.class Lexeme.class Helpers.class InputType.class Lexer.class Recognizer.class ReturnEncounteredException.class Environment.class Evaluator.class InterpreterSecurityManager.class Interpreter.class
 
 TokenType.class: TokenType.java
 	javac -d . -classpath . TokenType.java
@@ -8,6 +8,9 @@ Lexeme.class: Lexeme.java
 	
 Helpers.class: Helpers.java
 	javac -d . -classpath . Helpers.java
+	
+InputType.class: InputType.java
+	javac -d . -classpath . InputType.java
 	
 Lexer.class: Lexer.java
 	javac -d . -classpath . Lexer.java
@@ -26,6 +29,9 @@ Evaluator.class: Evaluator.java
 
 Interpreter.class: Interpreter.java
 	javac -d . -classpath . Interpreter.java
+	
+InterpreterSecurityManager.class: InterpreterSecurityManager.java
+	javac -d . -classpath . InterpreterSecurityManager.java
 
 # Examples
 error1: examples/error1.den
@@ -52,7 +58,7 @@ arrays: examples/arrays.den
 arraysx: examples/arrays.den
 	dpl examples/arrays.den
 	
-conditionals: examples/conditions.den
+conditionals: examples/conditionals.den
 	cat examples/conditionals.den
 
 conditionalsx: examples/conditionals.den
@@ -65,7 +71,7 @@ recursionx: examples/recursion.den
 	dpl examples/recursion.den
 	
 iteration: examples/iteration.den
-	cat examples/error2.den
+	cat examples/iteration.den
 
 iterationx: examples/iteration.den
 	dpl examples/iteration.den

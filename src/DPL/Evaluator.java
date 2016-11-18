@@ -120,8 +120,7 @@ public class Evaluator {
     }
 
     private Lexeme evalVariable(Lexeme pt, Lexeme env) {
-        Lexeme result = this.e.lookupEnv(pt, env);
-        return result;
+        return this.e.lookupEnv(pt, env);
     }
 
     private Lexeme evalList(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
@@ -145,6 +144,15 @@ public class Evaluator {
     private Lexeme evalBinaryExpr(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme operator = pt.left;
         Lexeme first = this.eval(pt.right.left, env);
+
+        // Short-circuiting
+        if (operator.type == AND && !first.bool) {
+            return new Lexeme(BOOLEAN, false);
+        }
+        if (operator.type == OR && first.bool) {
+            return new Lexeme(BOOLEAN, true);
+        }
+
         Lexeme second = this.eval(pt.right.right, env);
         Object result = null;
 
@@ -162,13 +170,6 @@ public class Evaluator {
             }
         }
 
-        if (operator.type == AND && first.bool) {
-            return new Lexeme(BOOLEAN, false);
-        }
-        if (operator.type == OR && first.bool) {
-            return new Lexeme(BOOLEAN, true);
-        }
-
         TokenType returnType;
         if (Helpers.contains(Helpers.mathOperators, operator)) {
             returnType = INTEGER;
@@ -179,8 +180,11 @@ public class Evaluator {
 
         boolean intsRequired = Helpers.contains(Helpers.intsRequired, operator);
 
-        if (intsRequired && (first.type != INTEGER && second.type != INTEGER) || first.type != second.type) {
-            Helpers.exitWithError(String.format("Invalid types for operator %s: %s and %s", pt.left.type, first.type, second.type));
+        // Ignore special case: string + other value
+        if (!(operator.type == PLUS && first.type == STRING)) {
+            if (intsRequired && (first.type != INTEGER && second.type != INTEGER) || first.type != second.type) {
+                Helpers.exitWithError(String.format("Invalid types for operator %s: %s and %s", pt.left.type, first.type, second.type));
+            }
         }
 
         boolean isInteger = (first.type == INTEGER);
@@ -195,6 +199,12 @@ public class Evaluator {
             case PLUS:
                 if (isInteger) {
                     result = first.integer + second.integer;
+                }
+                else if (second.type == INTEGER) {
+                    result = first.str + second.integer;
+                }
+                else if (second.type == BOOLEAN) {
+                    result = first.str + second.bool;
                 }
                 else {
                     result = first.str + second.str;
@@ -270,6 +280,9 @@ public class Evaluator {
     }
 
     private Lexeme evalFor(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
+        if (pt.left.type == IN) {
+            return this.evalForEach(pt, env);
+        }
         Lexeme loopArgs = pt.left;
         // Determine how many args the user supplied
         int length = Helpers.listLength(loopArgs);
@@ -299,6 +312,20 @@ public class Evaluator {
             result = this.eval(pt.right, env);
             // Update the loop variable after each iteration
             this.e.updateEnv(loopVar, new Lexeme(INTEGER, i + loopStep), env);
+        }
+
+        return result;
+    }
+
+    private Lexeme evalForEach(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
+        Lexeme loopVar = pt.left.left;
+        Lexeme loopObj = pt.left.right;
+        Lexeme eLoopObj = this.eval(loopObj, env);
+        this.e.insert(loopVar, null, env);
+        Lexeme result = null;
+        for (Lexeme l : eLoopObj.array) {
+            this.e.updateEnv(loopVar, l, env);
+            result = this.eval(pt.right, env);
         }
 
         return result;
@@ -379,15 +406,20 @@ public class Evaluator {
     }
 
     private Lexeme evalPrintln(Lexeme eargs) {
-        Lexeme printVal = Helpers.listIndex(eargs, 0);
-        System.out.println(Helpers.getPrintValWithDefault(printVal, null));
+        Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
+        System.out.println(Helpers.getPrintValWithDefault(printVal, ""));
         return null;
     }
 
     private Lexeme evalPrint(Lexeme eargs) {
-        Lexeme printVal = Helpers.listIndex(eargs, 0);
-        System.out.print(Helpers.getPrintValWithDefault(printVal, null));
+        Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
+        System.out.print(Helpers.getPrintValWithDefault(printVal, ""));
         return null;
+    }
+
+    private Lexeme evalStr(Lexeme eargs) {
+        Lexeme strVal = Helpers.listIndex(eargs, 0);
+        return new Lexeme(STRING, strVal.getVal().toString());
     }
 
     private Lexeme evalLength(Lexeme eargs, Lexeme obj) {
@@ -456,17 +488,19 @@ public class Evaluator {
     private Lexeme evalRemoveAt(Lexeme eargs, Lexeme obj) {
         Lexeme startRemove = Helpers.listIndex(eargs, 0);
         Lexeme endRemove = Helpers.optionalListIndex(eargs, 1);
-        if (endRemove == null) {
-            endRemove = startRemove;
+        int start = startRemove.integer;
+        int end = start + 1;
+        if (endRemove != null) {
+            end = endRemove.integer;
         }
         switch (obj.type) {
             case ARRAY:
-                for (int i = endRemove.integer; i >= startRemove.integer; i--) {
+                for (int i = end - 1; i >= start; i--) {
                     obj.array.remove(i);
                 }
                 return null;
             case STRING:
-                String newString = Helpers.removeStringRange(obj.str, startRemove.integer, endRemove.integer);
+                String newString = Helpers.removeStringRange(obj.str, start, end);
                 return new Lexeme(STRING, newString);
         }
         Helpers.exitIfNotStringOrArray("removeAt");
@@ -529,6 +563,8 @@ public class Evaluator {
             case "print": return this.evalPrint(eargs);
             case "input": return this.evalInput(eargs);
             case "getInt": return this.evalGetInt(eargs);
+            case "str": return this.evalStr(eargs);
+
             case "eq": return this.evalEq(eargs);
 
             case "length": return this.evalLength(eargs, env);
@@ -544,6 +580,7 @@ public class Evaluator {
         Lexeme closure = this.eval(pt.left, env);
         if (closure == null) {
             Helpers.exitWithError(pt.left.str + " is null");
+            return null;
         }
         Lexeme function = Helpers.getFunction(closure);
         Lexeme params = function.left;

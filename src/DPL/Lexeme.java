@@ -59,7 +59,7 @@ class Lexeme {
 
     Object getVal() {
         if (this.str != null) {
-            return "\"" + this.str + "\"";
+            return this.str;
         }
         else if (this.integer != null) {
             return this.integer;

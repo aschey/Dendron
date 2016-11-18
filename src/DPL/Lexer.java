@@ -70,7 +70,7 @@ public class Lexer {
 
         ch = this.read();
 
-        while(predicate.test(ch)) {
+        while (predicate.test(ch) && !this.isEndOfFile(ch)) {
             token += ch;
             ch = this.read();
         }

@@ -7,8 +7,10 @@ import java.util.Scanner;
 public class Interpreter {
     public static void main(String[] args) throws ReturnEncounteredException {
         Lexeme env = new Environment().createEnv();
+        Evaluator eval = new Evaluator();
         if (args.length > 0) {
-            new Evaluator().evaluate(args[0], InputType.FILE, env);
+            eval.evaluate(args[0], InputType.FILE, env);
+            //eval.evaluate("src/DPL/examples/iteration.den", InputType.FILE, env);
         }
         else {
             // When running the interactive interpreter, don't let System.exit() kill the program
@@ -17,7 +19,6 @@ public class Interpreter {
             System.setSecurityManager(manager);
 
             Scanner scan = new Scanner(System.in);
-            Evaluator eval = new Evaluator();
 
             while (scan.hasNext()) {
                 try {

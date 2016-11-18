@@ -1,0 +1,43 @@
+var a = 2;
+var b = 3;
+
+` Sequential conditionals
+if [a < 3] [
+    println['a < 3'];
+]
+
+if [[b == 3] and [a >= 2]] [
+    println['b == 3 and a >= 2'];
+]
+
+` Nested conditionals
+if [b == 3] [
+    if [a != 3] [
+        println['b == 3 and a != 3'];
+    ]
+    if [a <= 3] [
+        println['b == 3 and a <= 3'];
+    ]
+]
+
+var c = 4;
+var d = 5;
+var e = 6;
+
+` If/else
+if [c == 3] [
+    println['c == 3'];
+]
+else if [d == 5] [
+    println['d == 5'];
+]
+else [
+    print['d != 5 and c != 3'];
+]
+
+` Short-circuiting
+` z is undefined
+if [[c == 4] or [z != 3]] [
+    println['c == 4 or z != 3'];
+]
+

@@ -12,22 +12,23 @@ import static DPL.TokenType.*;
 public class Helpers {
 
     static ArrayList<String> keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true",
-        "false", "return", "lambda", "obj", "this", "null", "and", "or", "import"));
+        "false", "return", "lambda", "obj", "this", "null", "and", "or", "import", "in"));
 
     static HashMap<Character, TokenType> symbols = mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
-    PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '!', NOT, '=', ASSIGN, '/', SLASH, '^', CARAT, '%', REMAINDER, '.', DOT);
+    PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '!', NOT, '=', ASSIGN, '/', SLASH, '^', CARAT, '%', REMAINDER, '.', DOT, '#', HASH);
 
-    static HashMap<TokenType, String> binaryOpMappings = mapInitialize(
-        LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", CARAT, '^', SLASH, "/", REMAINDER, '%', AND, "and", OR, "or"
-    );
+    //private static HashMap<TokenType, String> binaryOpMappings = mapInitialize(
+    //    LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", CARAT, '^', SLASH, "/", REMAINDER, '%', AND, "and", OR, "or"
+    //);
 
-    static TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
+    //static TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
+    static TokenType[] binaryOperators = { LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, CARAT, SLASH, REMAINDER, AND, OR };
 
     static TokenType[] mathOperators = new TokenType[] { PLUS, MINUS, STAR, SLASH, CARAT, REMAINDER };
 
     static TokenType[] intsRequired = new TokenType[] { MINUS, STAR, SLASH, CARAT, REMAINDER };
 
-    static TokenType[] unaries = new TokenType[] { INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE };
+    static TokenType[] unaries = new TokenType[] { INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE, HASH };
 
     static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
         HashMap<T1, T2> result = new HashMap<>();
@@ -112,7 +113,12 @@ public class Helpers {
             String retVal = "[ ";
             ArrayList<Lexeme> arrayVal = (ArrayList<Lexeme>)val;
             for (Lexeme l : arrayVal) {
-                retVal += (l.getVal() + " ");
+                if (l.getVal().getClass() == ArrayList.class) {
+                    retVal += (getPrintValWithDefault(l, defaultVal) + " ");
+                }
+                else {
+                    retVal += (l.getVal() + " ");
+                }
             }
             retVal += "]";
             return retVal;

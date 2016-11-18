@@ -1,7 +1,32 @@
 ` Array declaration
-var a = .[1 2 3];
+var a = #[1 2 3];
 println[a];
 
-` Array manipulation
-append[a 4];
+` Array access
+println[#a[1]];
+
+` Append a value to the array
+a.append[4];
+println[a];
+
+` Get the array's length
+println[a.length[]];
+
+` Insert another array at index 1
+a.insert[#[1 2] 1];
+
+` Search for the value "2" and remove it
+var firstSuccess = a.remove[2];
+var secondSuccess = a.remove[10];
+println[a];
+println['firstSuccess is ' + firstSuccess];
+println['secondSuccess is ' + secondSuccess];
+
+` Remove a value at an index
+a = #[1 2 'a' 'b'];
+a.removeAt[1];
+println[a];
+
+` Remove values from a range of indexes (inclusive lower bound, exclusive upper bound)
+a.removeAt[0 3];
 println[a];

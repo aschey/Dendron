@@ -1,0 +1,43 @@
+def printSpace[v] [
+    print[str[v] + ' '];
+]
+
+` for loop
+
+` print numbers from 0 to 9
+for [i 10] [
+    printSpace[i];
+]
+println[];
+
+` print numbers from 5 to 9
+for [i 5 10] [
+    printSpace[i];
+]
+println[];
+
+` print numbers from 5 to 9, incrementing by 2 each time
+for [i 5 10 2] [
+    printSpace[i];
+]
+println[];
+
+` for each loop
+var a = #['a' 'b' 'c'];
+for [i in a] [
+    printSpace[i];
+]
+println[];
+
+for [i in #['d' 'e' 'f']] [
+    printSpace[i];
+]
+println[];
+
+`while loop
+var i = 0;
+while [i < 10] [
+    printSpace[i];
+    i = i + 1;
+]
+println[];

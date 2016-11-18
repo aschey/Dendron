@@ -58,7 +58,7 @@ arrays: examples/arrays.den
 arraysx: examples/arrays.den
 	dpl examples/arrays.den
 	
-conditionals: examples/conditions.den
+conditionals: examples/conditionals.den
 	cat examples/conditionals.den
 
 conditionalsx: examples/conditionals.den
@@ -71,7 +71,7 @@ recursionx: examples/recursion.den
 	dpl examples/recursion.den
 	
 iteration: examples/iteration.den
-	cat examples/error2.den
+	cat examples/iteration.den
 
 iterationx: examples/iteration.den
 	dpl examples/iteration.den
