@@ -1,13 +1,8 @@
 package DPL;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PushbackInputStream;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
-import java.util.ArrayList;
 
 import static DPL.TokenType.*;
 
@@ -19,18 +14,23 @@ public class Lexer {
     private boolean lineIsComment;
 
     public static void main(String[] args) {
-        Lexer lexer = new Lexer("dictionary.dpl");
-        Lexeme token = lexer.lex();
-        while (token.type != END_OF_INPUT) {
-            System.out.println(token.type + " " + token.str + " " + token.integer);
-            token = lexer.lex();
-        }
-
+        //Lexer lexer = new Lexer("dictionary.dpl");
+        //Lexeme token = lexer.lex();
+        //while (token.type != END_OF_INPUT) {
+        //    System.out.println(token.type + " " + token.str + " " + token.integer);
+        //    token = lexer.lex();
     }
 
-    public Lexer(String filename) {
+
+    public Lexer(String input, Helpers.InputType inputType) {
         try {
-            this.reader = new PushbackInputStream(new FileInputStream(filename));
+            switch (inputType) {
+                case FILE:
+                    this.reader = new PushbackInputStream(new FileInputStream(input));
+                    break;
+                case STDIN:
+                    this.reader = new PushbackInputStream(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+            }
         }
         catch (FileNotFoundException ex) {
             System.out.println("File not found");

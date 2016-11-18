@@ -21,16 +21,16 @@ public class Recognizer {
     }
 
     public static void main(String[] args) {
-        Recognizer recognizer = new Recognizer("func.dpl");
-        Lexeme l = recognizer.statements();
+        //Recognizer recognizer = new Recognizer("func.dpl");
+        //Lexeme l = recognizer.statements();
         //recognizer.traverse(l);
         //GraphWriter.quickGraph(l, "func");
         //System.out.println(l.right.left.right.left.type);
         //recognizer.prettyPrint(l);
     }
 
-    public Recognizer(String filename) {
-        this.lexer = new Lexer(filename);
+    public Recognizer(String input, Helpers.InputType inputType) {
+        this.lexer = new Lexer(input, inputType);
         this.currentLexeme = this.lexer.lex();
     }
 
@@ -600,7 +600,7 @@ public class Recognizer {
     private Lexeme importFile() {
         this.match(IMPORT);
         String filename = this.match(STRING).str;
-        Recognizer r = new Recognizer(filename);
+        Recognizer r = new Recognizer(filename, Helpers.InputType.FILE);
         Lexeme tree = r.recognize();
         return tree;
     }

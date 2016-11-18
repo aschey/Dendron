@@ -15,7 +15,7 @@ public class Evaluator {
     public static void main(String[] args) throws ReturnEncounteredException {
         //GraphWriter.quickGraph(func, "func");
         Evaluator eval = new Evaluator();
-        eval.evaluate("func.dpl");
+        //eval.evaluate("func.dpl");
 
     }
 
@@ -28,10 +28,11 @@ public class Evaluator {
         return result.bool;
     }
 
-    Lexeme evaluate(String filename) throws ReturnEncounteredException {
-        Recognizer r = new Recognizer(filename);
+    Lexeme evaluate(String input, Helpers.InputType inputType, Lexeme env) throws ReturnEncounteredException {
+        Recognizer r = new Recognizer(input, inputType);
         Lexeme parseTree = r.recognize();
-        return this.eval(parseTree, new Environment().createEnv());
+        this.eval(parseTree, env);
+        return env;
     }
 
     Lexeme eval (Lexeme tree, Lexeme env) throws ReturnEncounteredException {

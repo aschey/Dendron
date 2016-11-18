@@ -32,7 +32,7 @@ public class Helpers {
     static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
         HashMap<T1, T2> result = new HashMap<>();
         for (int i = 0; i < args.length - 1; i += 2) {
-            result.put((T1)args[i], (T2)args[i + 1]);
+            result.put((T1) args[i], (T2) args[i + 1]);
         }
 
         return result;
@@ -93,7 +93,7 @@ public class Helpers {
     static Object getPrintValWithDefault(Lexeme pt, String defaultVal) {
         Object val = getValWithDefault(pt, defaultVal);
         if (val == null) {
-            return val;
+            return null;
         }
         if (val.getClass() == ArrayList.class) {
             String retVal = "[ ";
@@ -114,5 +114,10 @@ public class Helpers {
         catch (NullPointerException ex) {
             return null;
         }
+    }
+
+    enum InputType {
+        FILE,
+        STDIN
     }
 }
