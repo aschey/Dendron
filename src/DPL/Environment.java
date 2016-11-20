@@ -23,7 +23,6 @@ public class Environment {
     }
 
     Lexeme lookupEnv(Lexeme variable, Lexeme env) {
-        //GraphWriter.quickGraph(env, "env");
         while (env != null) {
             Lexeme table = env.left;
             Lexeme vars = table.left;
@@ -65,5 +64,18 @@ public class Environment {
         table.left = Lexeme.cons(GLUE, variable, table.left);
         table.right = Lexeme.cons(GLUE, value, table.right);
         return value;
+    }
+
+    Lexeme insertList(Lexeme variables, Lexeme values, Lexeme env) {
+        while (variables != null) {
+            this.insert(variables.left, values.left, env);
+            variables = variables.right;
+            values = values.right;
+        }
+        return values;
+    }
+
+    Lexeme getStartVal(Lexeme env) {
+        return env.left.right.left;
     }
 }

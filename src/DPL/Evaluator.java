@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 
 /**
  * Created by aschey on 10/19/16.
@@ -28,6 +29,33 @@ public class Evaluator {
         return result.bool;
     }
 
+    Lexeme addBultins() {
+        Lexeme env = this.e.createEnv();
+        // General functions
+        this.addBuiltin("println", this::evalPrintln, env);
+        this.addBuiltin("print", this::evalPrint, env);
+        this.addBuiltin("input", this::evalInput, env);
+        this.addBuiltin("getInt", this::evalGetInt, env);
+        this.addBuiltin("str", this::evalStr, env);
+        this.addBuiltin("eq", this::evalEq, env);
+        this.addBuiltin("inspect", this::evalInspect, env);
+
+        // Array/string functions
+        this.addBuiltin("length", this::evalLength, env);
+        this.addBuiltin("append", this::evalAppend, env);
+        this.addBuiltin("insert", this::evalInsert, env);
+        this.addBuiltin("remove", this::evalRemove, env);
+        this.addBuiltin("removeAt", this::evalRemoveAt, env);
+        return env;
+    }
+
+    private void addBuiltin(String name, BiFunction<Lexeme, Lexeme, Lexeme> evaluator, Lexeme env) {
+        Lexeme tag = new Lexeme(BUILTIN);
+        tag.eval = evaluator;
+        Lexeme funcName = new Lexeme(VARIABLE, name);
+        this.e.insert(funcName, tag, env);
+    }
+
     Lexeme evaluate(String input, InputType inputType, Lexeme env) throws ReturnEncounteredException {
         Recognizer r = new Recognizer(input, inputType);
         Lexeme parseTree = r.recognize();
@@ -40,8 +68,8 @@ public class Evaluator {
             return null;
         }
 
-        if (env.type != ENV) {
-            Helpers.exitWithError("Cannot call property on object of type " + env.type);
+        if (tree.negative) {
+            return this.evalNegative(tree, env);
         }
 
         switch (tree.type) {
@@ -77,7 +105,8 @@ public class Evaluator {
     }
 
     private Lexeme evalNegative(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
-        int val = -1 * this.eval(pt.right, env).integer;
+        pt.negative = false;
+        int val = -1 * this.eval(pt, env).integer;
         return new Lexeme(INTEGER, val);
     }
 
@@ -171,14 +200,14 @@ public class Evaluator {
         }
 
         TokenType returnType;
-        if (Helpers.contains(Helpers.mathOperators, operator)) {
+        if (Helpers.mathOperators.contains(operator.type)) {
             returnType = INTEGER;
         }
         else {
             returnType = BOOLEAN;
         }
 
-        boolean intsRequired = Helpers.contains(Helpers.intsRequired, operator);
+        boolean intsRequired = Helpers.intsRequired.contains(operator);
 
         // Ignore special case: string + other value
         if (!(operator.type == PLUS && first.type == STRING)) {
@@ -271,7 +300,7 @@ public class Evaluator {
     }
 
     private Lexeme evalWhile(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
-        Lexeme result = new Lexeme(BOOLEAN, "false");
+        Lexeme result = new Lexeme(BOOLEAN, false);
         while (this.isTrue(pt.left, env)) {
             result = this.eval(pt.right, env);
         }
@@ -306,7 +335,7 @@ public class Evaluator {
 
         // Create the new loop variable
         this.e.insert(loopVar, loopStartLexeme, env);
-        Lexeme result = new Lexeme(BOOLEAN, "false");
+        Lexeme result = new Lexeme(BOOLEAN, false);
 
         for (int i = loopStart; i < loopEnd; i += loopStep) {
             result = this.eval(pt.right, env);
@@ -379,6 +408,16 @@ public class Evaluator {
 
     private Lexeme evalProperty(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme obj = this.eval(pt.left, env);
+
+        // Create a new environment for string and array method calls
+        if (obj.type != ENV) {
+            Lexeme newEnv = this.e.extendEnv(null, null, env);
+            Lexeme vars = Helpers.getVars(pt.right);
+            Lexeme vals = this.eval(vars, env);
+            this.e.insertList(vars, vals, newEnv);
+            this.e.insert(pt.left, obj, newEnv);
+            obj = newEnv;
+        }
         if (obj == null) {
             if (pt.left.type == FUNC_CALL) {
                 Helpers.exitWithError(pt.left.left.str + " is null");
@@ -388,6 +427,7 @@ public class Evaluator {
             }
             return null;
         }
+
         if (obj.type != ENV && obj.type != ARRAY && obj.type != STRING) {
             Helpers.exitWithError("attempting to retrieve property on variable of type " + obj.type);
         }
@@ -402,27 +442,29 @@ public class Evaluator {
             Lexeme eargs = this.eval(pt.right.right, env);
             return this.evalFuncCall(pt.right, eargs, obj);
         }
+
         return this.eval(pt.right, obj);
     }
 
-    private Lexeme evalPrintln(Lexeme eargs) {
+    private Lexeme evalPrintln(Lexeme eargs, Lexeme env) {
         Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
         System.out.println(Helpers.getPrintValWithDefault(printVal, ""));
         return null;
     }
 
-    private Lexeme evalPrint(Lexeme eargs) {
+    private Lexeme evalPrint(Lexeme eargs, Lexeme env) {
         Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
         System.out.print(Helpers.getPrintValWithDefault(printVal, ""));
         return null;
     }
 
-    private Lexeme evalStr(Lexeme eargs) {
+    private Lexeme evalStr(Lexeme eargs, Lexeme env) {
         Lexeme strVal = Helpers.listIndex(eargs, 0);
         return new Lexeme(STRING, strVal.getVal().toString());
     }
 
-    private Lexeme evalLength(Lexeme eargs, Lexeme obj) {
+    private Lexeme evalLength(Lexeme eargs, Lexeme env) {
+        Lexeme obj = this.e.getStartVal(env);
         switch (obj.type) {
             case ARRAY:
                 return new Lexeme(INTEGER, obj.array.size());
@@ -433,7 +475,8 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalAppend(Lexeme eargs, Lexeme obj) {
+    private Lexeme evalAppend(Lexeme eargs, Lexeme env) {
+        Lexeme obj = this.e.getStartVal(env);
         Lexeme valToAdd = Helpers.listIndex(eargs, 0);
         switch (obj.type) {
             case ARRAY:
@@ -446,7 +489,8 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalInsert(Lexeme eargs, Lexeme obj) {
+    private Lexeme evalInsert(Lexeme eargs, Lexeme env) {
+        Lexeme obj = this.e.getStartVal(env);
         Lexeme valToAdd = Helpers.listIndex(eargs, 0);
         int index = Helpers.listIndex(eargs, 1).integer;
         switch (obj.type) {
@@ -461,7 +505,8 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalRemove(Lexeme eargs, Lexeme obj) {
+    private Lexeme evalRemove(Lexeme eargs, Lexeme env) {
+        Lexeme obj = this.e.getStartVal(env);
         Lexeme valToRemove = Helpers.listIndex(eargs, 0);
         switch (obj.type) {
             case ARRAY:
@@ -474,18 +519,20 @@ public class Evaluator {
                 return new Lexeme(BOOLEAN, false);
             case STRING:
                 int removeLength = valToRemove.str.length();
-                for (int i = 0; i < obj.str.length() - removeLength; i++) {
+                for (int i = 0; i <= obj.str.length() - removeLength; i++) {
                     if (obj.str.substring(i, i + removeLength).equals(valToRemove.str)) {
                         String newString = Helpers.removeStringRange(obj.str, i, i + removeLength);
                         return new Lexeme(STRING, newString);
                     }
                 }
+                return obj;
         }
         Helpers.exitIfNotStringOrArray("remove");
         return null;
     }
 
-    private Lexeme evalRemoveAt(Lexeme eargs, Lexeme obj) {
+    private Lexeme evalRemoveAt(Lexeme eargs, Lexeme env) {
+        Lexeme obj = this.e.getStartVal(env);
         Lexeme startRemove = Helpers.listIndex(eargs, 0);
         Lexeme endRemove = Helpers.optionalListIndex(eargs, 1);
         int start = startRemove.integer;
@@ -507,7 +554,7 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalInput(Lexeme eargs) {
+    private Lexeme evalInput(Lexeme eargs, Lexeme env) {
         Scanner scan;
         String inputFile = Helpers.listIndex(eargs, 0).str;
         ArrayList<Lexeme> array = new ArrayList<>();
@@ -528,7 +575,7 @@ public class Evaluator {
         return new Lexeme(ARRAY, array);
     }
 
-    private Lexeme evalGetInt(Lexeme eargs) {
+    private Lexeme evalGetInt(Lexeme eargs, Lexeme env) {
         String val = Helpers.listIndex(eargs, 0).str;
         try {
             return new Lexeme(INTEGER, Integer.parseInt(val));
@@ -538,7 +585,7 @@ public class Evaluator {
         }
     }
 
-    private Lexeme evalEq(Lexeme eargs) {
+    private Lexeme evalEq(Lexeme eargs, Lexeme env) {
         Lexeme first = Helpers.listIndex(eargs, 0);
         Lexeme second = Helpers.listIndex(eargs, 1);
         if (first == null) {
@@ -550,37 +597,34 @@ public class Evaluator {
         return new Lexeme(BOOLEAN, first.equals(second));
     }
 
+    private Lexeme evalInspect(Lexeme eargs, Lexeme env) {
+        Lexeme inspectVal = Helpers.listIndex(eargs, 0);
+        Lexeme printVal = Helpers.optionalListIndex(eargs, 1);
+        System.out.println(inspectVal.str + " is " + Helpers.getPrintValWithDefault(printVal, null));
+        return null;
+    }
+
     private Lexeme evalFuncCall(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme args = pt.right;
         Lexeme eargs = this.eval(args, env);
+        if (pt.left.str != null && pt.left.str.equals("inspect")) {
+            eargs = Helpers.listCons(new Lexeme(STRING, pt.left.inspectVal), eargs);
+        }
         return this.evalFuncCall(pt, eargs, env);
     }
 
     private Lexeme evalFuncCall(Lexeme pt, Lexeme eargs, Lexeme env) throws ReturnEncounteredException {
-        String funcName = pt.left.str;
-        switch(funcName) {
-            case "println": return this.evalPrintln(eargs);
-            case "print": return this.evalPrint(eargs);
-            case "input": return this.evalInput(eargs);
-            case "getInt": return this.evalGetInt(eargs);
-            case "str": return this.evalStr(eargs);
-
-            case "eq": return this.evalEq(eargs);
-
-            case "length": return this.evalLength(eargs, env);
-            case "append": return this.evalAppend(eargs, env);
-            case "insert": return this.evalInsert(eargs, env);
-            case "remove": return this.evalRemove(eargs, env);
-            case "removeAt": return this.evalRemoveAt(eargs, env);
-            default: return this.evalUserDefinedFuncCall(pt, eargs, env);
-        }
-    }
-
-    private Lexeme evalUserDefinedFuncCall(Lexeme pt, Lexeme eargs, Lexeme env) throws ReturnEncounteredException {
         Lexeme closure = this.eval(pt.left, env);
         if (closure == null) {
             Helpers.exitWithError(pt.left.str + " is null");
             return null;
+        }
+        return this.evalClosure(closure, eargs, env);
+    }
+
+    private Lexeme evalClosure(Lexeme closure, Lexeme eargs, Lexeme env) {
+        if (closure.type == BUILTIN) {
+            return closure.eval.apply(eargs, env);
         }
         Lexeme function = Helpers.getFunction(closure);
         Lexeme params = function.left;

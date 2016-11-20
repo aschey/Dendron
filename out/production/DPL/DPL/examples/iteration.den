@@ -17,7 +17,7 @@ for [i 5 10] [
 println[];
 
 ` print numbers from 5 to 9, incrementing by 2 each time
-for [i 5 9 2] [
+for [i 5 10 2] [
     printSpace[i];
 ]
 println[];

@@ -1,6 +1,7 @@
 package DPL;
 
 import java.io.*;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 
@@ -12,6 +13,8 @@ import static DPL.TokenType.*;
 public class Lexer {
     private PushbackInputStream reader;
     private boolean lineIsComment;
+    private int oBracketCount;
+    private int cBracketCount;
 
     public static void main(String[] args) {
         //Lexer lexer = new Lexer("dictionary.dpl");
@@ -23,17 +26,20 @@ public class Lexer {
 
 
     public Lexer(String input, InputType inputType) {
+        final int BUFFER_SIZE = 2048;
         try {
             switch (inputType) {
                 case FILE:
-                    this.reader = new PushbackInputStream(new FileInputStream(input));
+                    String file = new File("").getAbsolutePath().concat("/" + input);
+                    this.reader = new PushbackInputStream(new FileInputStream(file), BUFFER_SIZE);
                     break;
                 case STDIN:
-                    this.reader = new PushbackInputStream(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
+                    this.reader = new PushbackInputStream(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), BUFFER_SIZE);
             }
         }
         catch (FileNotFoundException ex) {
             System.out.println("File not found");
+            System.exit(1);
         }
         this.lineIsComment = false;
     }
@@ -57,6 +63,12 @@ public class Lexer {
         catch (IOException ex) {
             System.out.println("Error putting character back into file");
             System.exit(1);
+        }
+    }
+
+    private void putBackMultiple(String s) {
+        for (int i = s.length() - 1; i >= 0; i--) {
+            this.putBack(s.charAt(i));
         }
     }
 
@@ -115,8 +127,35 @@ public class Lexer {
         return new Lexeme(STRING, token);
     }
 
+    private boolean funcBodyComplete(Character ch) {
+        if (this.isEndOfFile(ch)) {
+            return false;
+        }
+        if (ch == '[') {
+            this.oBracketCount++;
+        }
+        else if (ch == ']') {
+            this.cBracketCount++;
+        }
+        if (this.oBracketCount == this.cBracketCount) {
+            this.oBracketCount = 0;
+            this.cBracketCount = 0;
+            return false;
+        }
+        return true;
+    }
+
     private Lexeme lexVariableOrKeyword() {
         String token = this.getTokenWithPredicate((Character ch) -> Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '_');
+        if (token.equals("inspect")) {
+            String inspectVal = this.getTokenWithPredicate(this::funcBodyComplete);
+            Lexeme inspectLexeme = new Lexeme(VARIABLE, token);
+            // Get rid of "["
+            inspectLexeme.inspectVal = inspectVal.substring(1);
+            // Put the value back so it can be lexed
+            this.putBackMultiple(inspectVal);
+            return inspectLexeme;
+        }
         if (!Helpers.keywords.contains(token)) {
             return new Lexeme(VARIABLE, token);
         }
@@ -146,8 +185,21 @@ public class Lexer {
 
         char ch = this.read();
 
+        boolean negative = false;
+
         if (this.isEndOfFile(ch)) {
             return new Lexeme(END_OF_INPUT);
+        }
+
+        if (ch == '-') {
+            char next = this.read();
+            if (!Character.isWhitespace(next)) {
+               negative = true;
+                ch = next;
+            }
+            else {
+                this.putBack(next);
+            }
         }
 
         if (Helpers.symbols.containsKey(ch)) {
@@ -163,14 +215,18 @@ public class Lexer {
 
         if (Character.isDigit(ch)) {
             this.putBack(ch);
-            return lexDigit();
+            Lexeme result = this.lexDigit();
+            result.negative = negative;
+            return result;
         }
         else if (Character.isAlphabetic(ch) || ch == '_') {
             this.putBack(ch);
-            return lexVariableOrKeyword();
+            Lexeme result = this.lexVariableOrKeyword();
+            result.negative = negative;
+            return result;
         }
         else if (ch == '\'') {
-            return lexString();
+            return this.lexString();
         }
 
         return new Lexeme(UNKNOWN);

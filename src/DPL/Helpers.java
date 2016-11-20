@@ -11,24 +11,25 @@ import static DPL.TokenType.*;
  */
 public class Helpers {
 
-    static ArrayList<String> keywords = new ArrayList<>(Arrays.asList("if", "else", "for", "while", "var", "def", "true",
-        "false", "return", "lambda", "obj", "this", "null", "and", "or", "import", "in"));
+    static ArrayList<String> keywords = createList("if", "else", "for", "while", "var", "def", "true",
+        "false", "return", "lambda", "obj", "this", "null", "and", "or", "import", "in", "invoke");
 
     static HashMap<Character, TokenType> symbols = mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
     PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '!', NOT, '=', ASSIGN, '/', SLASH, '^', CARAT, '%', REMAINDER, '.', DOT, '#', HASH);
 
-    //private static HashMap<TokenType, String> binaryOpMappings = mapInitialize(
-    //    LT, "<", GT, ">", LEQ, "<=", GEQ, ">=", EQ, "==", NEQ, "!=", PLUS, "+", MINUS, "-", STAR, "*", CARAT, '^', SLASH, "/", REMAINDER, '%', AND, "and", OR, "or"
-    //);
+    static ArrayList<TokenType> selfEvaluating = createList(INTEGER, STRING, BOOLEAN, NULL);
 
-    //static TokenType[] binaryOperators = binaryOpMappings.keySet().toArray(new TokenType[0]);
-    static TokenType[] binaryOperators = { LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, CARAT, SLASH, REMAINDER, AND, OR };
+    static ArrayList<TokenType> binaryOperators = createList(LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, CARAT, SLASH, REMAINDER, AND, OR);
 
-    static TokenType[] mathOperators = new TokenType[] { PLUS, MINUS, STAR, SLASH, CARAT, REMAINDER };
+    static ArrayList<TokenType> mathOperators = createList(PLUS, MINUS, STAR, SLASH, CARAT, REMAINDER);
 
-    static TokenType[] intsRequired = new TokenType[] { MINUS, STAR, SLASH, CARAT, REMAINDER };
+    static ArrayList<TokenType> intsRequired = createList(MINUS, STAR, SLASH, CARAT, REMAINDER);
 
-    static TokenType[] unaries = new TokenType[] { INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE, HASH };
+    static ArrayList<TokenType> unaries = createList(INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE, HASH);
+
+    static <T> ArrayList<T> createList(T... args) {
+        return new ArrayList<>(Arrays.asList(args));
+    }
 
     static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
         HashMap<T1, T2> result = new HashMap<>();
@@ -72,6 +73,36 @@ public class Helpers {
         }
     }
 
+    static Lexeme listCons(Lexeme newVal, Lexeme list) {
+        Lexeme result = new Lexeme(LIST);
+        result.left = newVal;
+        result.right = list;
+        return result;
+    }
+
+    private static Lexeme getVars(Lexeme pt, Lexeme vars) {
+        if (pt == null) {
+            return vars;
+        }
+        if (pt.type == VARIABLE) {
+            Lexeme tree = new Lexeme(LIST);
+            tree.left = pt;
+            tree.right = vars;
+            vars = tree;
+        }
+        if (pt.left != null) {
+            vars = getVars(pt.left, vars);
+        }
+        if (pt.right != null) {
+            vars = getVars(pt.right, vars);
+        }
+        return vars;
+    }
+
+    static Lexeme getVars(Lexeme pt) {
+        return getVars(pt, null);
+    }
+
     static int listLength(Lexeme list) {
         int length = 0;
         while (list != null) {
@@ -80,10 +111,6 @@ public class Helpers {
         }
 
         return length;
-    }
-
-    static boolean contains(TokenType[] search, Lexeme val) {
-        return Arrays.stream(search).anyMatch(t -> t.equals(val.type));
     }
 
     static Lexeme getFunction(Lexeme closure) {

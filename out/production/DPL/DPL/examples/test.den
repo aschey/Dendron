@@ -1,0 +1,7 @@
+def a[b c] [
+    return b + c;
+]
+
+var d = 1;
+
+println[a[[-1 - 1] -d]];

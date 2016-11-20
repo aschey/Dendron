@@ -1,4 +1,4 @@
-def AvlTree[comp] [
+def AvlTree[comp getVal] [
     def AvlNode[val] [
         var left = null;
         var right = null;
@@ -81,7 +81,7 @@ def AvlTree[comp] [
     def _printTree[curRoot] [
         if [curRoot != null] [
             _printTree[curRoot.left];
-            println[curRoot.val];
+            println[getVal[curRoot.val]];
             _printTree[curRoot.right];
         ]
     ]
@@ -332,12 +332,12 @@ def comp[a b] [
         return 0;
     ]
 ]
-var t = AvlTree[comp];
-t.insert[3];
-t.insert[4];
-t.insert[5];
-t.insert[1];
-t.insert[0];
+`var t = AvlTree[comp];
+`t.insert[3];
+`t.insert[4];
+`t.insert[5];
+`t.insert[1];
+`t.insert[0];
 `for [i 10 100] [
 `    if [[i % 2] == 0] [
 `        t.insert[i];
@@ -346,7 +346,7 @@ t.insert[0];
 `        t.insert[-i];
 `    ]
 `]
-t.printTree[];
+`t.printTree[];
 
 def dict[] [
     def dictNode[key val] [
@@ -363,7 +363,7 @@ def dict[] [
         return 0;
     ]
 
-    var store = AvlTree[comp];
+    var store = AvlTree[comp lambda [node] [ return node.key; ]];
 
     def insert[key val] [
         var node = dictNode[key val];
@@ -389,13 +389,13 @@ def dict[] [
 ]
 
 var d = dict[];
-`for [i 100] [
-`    if [[i % 2] == 0] [
-`        d.insert[-i] [-i]];
-`    ]
-`    else [
-`        d.insert[i i];
-`    ]
-`]
-`println[d.find[-2].val.val];
-`d.store.printTree[];
+for [i 100] [
+    if [[i % 2] == 0] [
+        d.insert[[-i] [-i]];
+    ]
+    else [
+        d.insert[i i];
+    ]
+]
+println[d.find[-2].val.val];
+d.store.printTree[];

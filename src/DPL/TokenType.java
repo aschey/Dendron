@@ -60,5 +60,7 @@ enum TokenType {
     OBJ,
     THIS,
     PROPERTY,
-    IMPORT
+    IMPORT,
+    INVOKE,
+    BUILTIN
 }

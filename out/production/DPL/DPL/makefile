@@ -33,6 +33,9 @@ Interpreter.class: Interpreter.java
 InterpreterSecurityManager.class: InterpreterSecurityManager.java
 	javac -d . -classpath . InterpreterSecurityManager.java
 
+clean:
+	rm DPL/*
+
 # Examples
 error1: examples/error1.den
 	cat examples/error1.den
@@ -75,9 +78,15 @@ iteration: examples/iteration.den
 
 iterationx: examples/iteration.den
 	dpl examples/iteration.den
+
+functions: examples/functions.den
+	cat examples/functions.den
+
+functionsx: examples/functions.den
+	dpl examples/functions.den
 	
-dictionary: examples/error2.den
+dictionary: examples/dictionary.den
 	cat examples/dictionary.den
 
-dictionaryx: examples/error2.den
+dictionaryx: examples/dictionary.den
 	dpl examples/dictionary.den

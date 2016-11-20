@@ -4,6 +4,7 @@
 package DPL;
 
 import java.util.ArrayList;
+import java.util.function.BiFunction;
 
 class Lexeme {
     TokenType type;
@@ -13,6 +14,9 @@ class Lexeme {
     ArrayList<Lexeme> array;
     Lexeme left;
     Lexeme right;
+    BiFunction<Lexeme, Lexeme, Lexeme> eval;
+    String inspectVal;
+    boolean negative = false;
 
     Lexeme(TokenType type) {
         this.type = type;

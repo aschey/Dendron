@@ -6,11 +6,12 @@ import java.util.Scanner;
  */
 public class Interpreter {
     public static void main(String[] args) throws ReturnEncounteredException {
-        Lexeme env = new Environment().createEnv();
         Evaluator eval = new Evaluator();
-        if (args.length > 0) {
-            eval.evaluate(args[0], InputType.FILE, env);
-            //eval.evaluate("src/DPL/examples/iteration.den", InputType.FILE, env);
+        Lexeme env = eval.addBultins();
+
+        if (args.length == 0) {
+            //eval.evaluate(args[0], InputType.FILE, env);
+            eval.evaluate("src/DPL/examples/test.den", InputType.FILE, env);
         }
         else {
             // When running the interactive interpreter, don't let System.exit() kill the program

@@ -46,9 +46,8 @@ def evalOp[op a b] [
 
 def calculate[data] [
     var stack = Stack[];
-    for [i length[data]] [
-        var next = .data[i];
-        var intVal = getInt[next];
+    for [val in data] [
+        var intVal = getInt[val];
 
         if [intVal != null] [
             stack.push[intVal];
@@ -56,7 +55,7 @@ def calculate[data] [
         else [
             var b = stack.pop[];
             var a = stack.pop[];
-            var result = evalOp[next a b];
+            var result = evalOp[val a b];
             stack.push[result];
         ]
     ]

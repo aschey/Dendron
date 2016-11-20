@@ -1,16 +1,16 @@
 ` Array declaration
 var a = #[1 2 3];
-println[a];
+inspect[a];
 
 ` Array access
-println[#a[1]];
+inspect[#a[1]];
 
 ` Append a value to the array
 a.append[4];
-println[a];
+inspect[a];
 
 ` Get the array's length
-println[a.length[]];
+inspect[a.length[]];
 
 ` Insert another array at index 1
 a.insert[#[1 2] 1];
@@ -18,15 +18,17 @@ a.insert[#[1 2] 1];
 ` Search for the value "2" and remove it
 var firstSuccess = a.remove[2];
 var secondSuccess = a.remove[10];
-println[a];
-println['firstSuccess is ' + firstSuccess];
-println['secondSuccess is ' + secondSuccess];
+inspect[a];
+inspect[firstSuccess];
+inspect[secondSuccess];
 
 ` Remove a value at an index
 a = #[1 2 'a' 'b'];
 a.removeAt[1];
-println[a];
+inspect[a];
 
 ` Remove values from a range of indexes (inclusive lower bound, exclusive upper bound)
 a.removeAt[0 3];
-println[a];
+inspect[a];
+
+` Note: all functions that can be used on arrays can be used on strings
