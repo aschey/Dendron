@@ -17,6 +17,7 @@ class Lexeme {
     BiFunction<Lexeme, Lexeme, Lexeme> eval;
     String inspectVal;
     boolean negative = false;
+    boolean negativeEvaled = false;
 
     Lexeme(TokenType type) {
         this.type = type;

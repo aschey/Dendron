@@ -3,5 +3,13 @@ import 'dictionarylib.den'
 var d = dict[];
 
 for [i 100] [
-    if [i % 2 == 0] [
-        d.insert[[-i] [-i]];
+    d.insert[-i -i];
+    d.insert[i i];
+    println[d.find[100]];
+]
+`d.print[];
+for [i -100 100 4] [
+    d.delete[i];
+]
+`d.print[];
+inspect[d.find[99]];

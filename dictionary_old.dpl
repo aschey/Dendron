@@ -1,5 +1,5 @@
 
-def AvlTree[comp] [
+def AvlTree[comp getVal] [
     def AvlNode[element left right] [
         var height;
         return this;
@@ -129,11 +129,13 @@ def AvlTree[comp] [
         ]
 
         if [[balance > 1] and [getBalance[t.left] < 0]] [
+            inspect[t.left];
             t.left = rotateWithLeftChild[t];
             return rotateWithRightChild[t];
         ]
 
         if [[balance < -1] and [getBalance[t.right] <= 0]] [
+            inspect[t.left];
             return rotateWithLeftChild[t];
         ]
 
@@ -195,7 +197,7 @@ def AvlTree[comp] [
     def _printTree[t] [
         if [t != null] [
             _printTree[t.left];
-            println[t.element];
+            println[getVal[t.element]];
             _printTree[t.right];
         ]
     ]
@@ -287,7 +289,11 @@ def dict[] [
         ]
     ]
 
-    var store = AvlTree[comp];
+    def getVal[node] [
+        return node.key;
+    ]
+
+    var store = AvlTree[comp getVal];
 
     def insert[key value] [
         var node = dictNode[key value];
@@ -313,7 +319,10 @@ def dict[] [
 ]
 
 var d = dict[];
-d.insert[1 'a'];
-d.insert[2 'b'];
-d.update[1 'c'];
-println[d.find[1].val];
+for [i 100] [
+    d.insert[i i];
+]
+for [i 50] [
+    d.delete[i];
+]
+d.store.printTree[];

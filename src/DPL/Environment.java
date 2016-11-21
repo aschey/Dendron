@@ -36,8 +36,13 @@ public class Environment {
             }
             env = env.right;
         }
-
-        Helpers.exitWithError("variable " + variable.getVal() + " not found");
+        try {
+            throw new Exception();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        //Helpers.exitWithError("variable " + variable.getVal() + " not found");
         return null;
     }
 

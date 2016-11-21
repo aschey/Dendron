@@ -175,13 +175,13 @@ def AvlTree[comp getVal] [
         if [root == null] [
             return null;
         ]
-        if [comp[key root.key] < 0] [
+        if [comp[root.key key] < 0] [
             return _find[root.left key];
         ]
-        if [comp[key root.key] > 0] [
+        if [comp[root.key key] > 0] [
             return _find[root.right key];
         ]
-        return root.key;
+        return root;
     ]
 
     def printTree[] [
@@ -210,18 +210,18 @@ def comp[a b] [
     return 0;
 ]
 
-`var t = AvlTree[comp];
+var t = AvlTree[comp];
 `t.insert[1];
 `t.insert[2];
 `t.insert[3];
-`for [i 1000] [
-`    t.insert[i];
-`    t.insert[-i];
-`]
-`for [i -100 100 4] [
-`    t.delete[i];
-`]
-`t.printTree[];
+for [i 1000] [
+    t.insert[i];
+    t.insert[-i];
+]
+for [i -100 100 4] [
+    t.delete[i];
+]
+t.printTree[];
 
 def dict[] [
     def dictNode[key val] [
@@ -252,14 +252,6 @@ def dict[] [
         return tree.find[searchNode];
     ]
 
-    def get[key] [
-        var node = find[key];
-        if [node == null] [
-            return null;
-        ]
-        return node.val;
-    ]
-
     def delete[key] [
         var deleteNode = dictNode[key null];
         return tree.delete[deleteNode];
@@ -267,21 +259,12 @@ def dict[] [
 
     def update[key newVal] [
         var updateNode = find[key];
-        if [updateNode == null] [
-            return null;
-        ]
         updateNode.val = newVal;
-        return updateNode;
     ]
 
     def print[] [
-        tree.printTree[];
+        store.printTree[];
     ]
 
     return this;
 ]
-
-var d = dict[];
-d.insert[1 1];
-d.insert[2 2];
-inspect[d.find[2]];

@@ -63,7 +63,7 @@ public class Evaluator {
         return env;
     }
 
-    private Lexeme eval (Lexeme tree, Lexeme env) throws ReturnEncounteredException {
+    private Lexeme eval(Lexeme tree, Lexeme env) throws ReturnEncounteredException {
         if (tree == null) {
             return null;
         }
@@ -72,6 +72,10 @@ public class Evaluator {
             return this.evalNegative(tree, env);
         }
 
+        return this.evalWithoutNegative(tree, env);
+    }
+
+    private Lexeme evalWithoutNegative(Lexeme tree, Lexeme env) throws ReturnEncounteredException {
         switch (tree.type) {
             case INTEGER: return tree;
             case STRING: return tree;
@@ -105,8 +109,12 @@ public class Evaluator {
     }
 
     private Lexeme evalNegative(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
-        pt.negative = false;
-        int val = -1 * this.eval(pt, env).integer;
+        Lexeme result = this.evalWithoutNegative(pt, env);
+        if (result == null || result.type != INTEGER) {
+            Helpers.exitWithError("Unary negative does not resolve to integer");
+            return null;
+        }
+        int val = -1 * result.integer;
         return new Lexeme(INTEGER, val);
     }
 
@@ -201,7 +209,12 @@ public class Evaluator {
 
         TokenType returnType;
         if (Helpers.mathOperators.contains(operator.type)) {
-            returnType = INTEGER;
+            if (first.type == INTEGER) {
+                returnType = INTEGER;
+            }
+            else {
+                returnType = STRING;
+            }
         }
         else {
             returnType = BOOLEAN;
@@ -226,7 +239,7 @@ public class Evaluator {
                 result = first.bool || second.bool;
                 break;
             case PLUS:
-                if (isInteger) {
+                if (first.type == INTEGER) {
                     result = first.integer + second.integer;
                 }
                 else if (second.type == INTEGER) {
@@ -409,15 +422,6 @@ public class Evaluator {
     private Lexeme evalProperty(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme obj = this.eval(pt.left, env);
 
-        // Create a new environment for string and array method calls
-        if (obj.type != ENV) {
-            Lexeme newEnv = this.e.extendEnv(null, null, env);
-            Lexeme vars = Helpers.getVars(pt.right);
-            Lexeme vals = this.eval(vars, env);
-            this.e.insertList(vars, vals, newEnv);
-            this.e.insert(pt.left, obj, newEnv);
-            obj = newEnv;
-        }
         if (obj == null) {
             if (pt.left.type == FUNC_CALL) {
                 Helpers.exitWithError(pt.left.left.str + " is null");
@@ -426,6 +430,16 @@ public class Evaluator {
                 Helpers.exitWithError(pt.left.str + " is null");
             }
             return null;
+        }
+
+        // Create a new environment for string and array method calls
+        if (obj.type != ENV) {
+            Lexeme newEnv = this.e.extendEnv(null, null, env);
+            Lexeme vars = Helpers.getVars(pt.right);
+            Lexeme vals = this.eval(vars, env);
+            this.e.insertList(vars, vals, newEnv);
+            this.e.insert(pt.left, obj, newEnv);
+            obj = newEnv;
         }
 
         if (obj.type != ENV && obj.type != ARRAY && obj.type != STRING) {
@@ -448,13 +462,23 @@ public class Evaluator {
 
     private Lexeme evalPrintln(Lexeme eargs, Lexeme env) {
         Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
-        System.out.println(Helpers.getPrintValWithDefault(printVal, ""));
+        if (eargs == null) {
+            System.out.println();
+        }
+        else {
+            System.out.println(Helpers.getPrintValWithDefault(printVal, null));
+        }
         return null;
     }
 
     private Lexeme evalPrint(Lexeme eargs, Lexeme env) {
         Lexeme printVal = Helpers.optionalListIndex(eargs, 0);
-        System.out.print(Helpers.getPrintValWithDefault(printVal, ""));
+        if (eargs == null) {
+            System.out.print("");
+        }
+        else {
+            System.out.print(Helpers.getPrintValWithDefault(printVal, null));
+        }
         return null;
     }
 
@@ -632,8 +656,7 @@ public class Evaluator {
         Lexeme xenv = e.extendEnv(denv, params, eargs);
         // Eval function code
         try {
-            Lexeme result = this.eval(function.right, xenv);
-            return result;
+            return this.eval(function.right, xenv);
         }
         catch (ReturnEncounteredException ex) {
             return ex.retVal;
