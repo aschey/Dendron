@@ -13,12 +13,6 @@ import java.util.function.BiFunction;
  */
 public class Evaluator {
     private Environment e;
-    public static void main(String[] args) throws ReturnEncounteredException {
-        //GraphWriter.quickGraph(func, "func");
-        Evaluator eval = new Evaluator();
-        //eval.evaluate("func.dpl");
-
-    }
 
     public Evaluator() {
         this.e = new Environment();
@@ -80,7 +74,7 @@ public class Evaluator {
             case INTEGER: return tree;
             case STRING: return tree;
             case BOOLEAN: return tree;
-            case THIS: return tree;
+            case THIS: return env;
             case NULL: return null;
             case NEGATIVE: return this.evalNegative(tree, env);
             case NOT: return this.evalNot(tree, env);
@@ -109,6 +103,7 @@ public class Evaluator {
     }
 
     private Lexeme evalNegative(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
+        // Don't check for negative again to avoid infinite loop
         Lexeme result = this.evalWithoutNegative(pt, env);
         if (result == null || result.type != INTEGER) {
             Helpers.exitWithError("Unary negative does not resolve to integer");
@@ -143,9 +138,7 @@ public class Evaluator {
 
     private Lexeme evalReturn(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme result = this.eval(pt.right, env);
-        if (result != null && result.type == THIS) {
-            result = env;
-        }
+        // Stop parsing the input when a return is encountered
         throw new ReturnEncounteredException(result);
     }
 
@@ -220,7 +213,7 @@ public class Evaluator {
             returnType = BOOLEAN;
         }
 
-        boolean intsRequired = Helpers.intsRequired.contains(operator);
+        boolean intsRequired = Helpers.intsRequired.contains(operator.type);
 
         // Ignore special case: string + other value
         if (!(operator.type == PLUS && first.type == STRING)) {
@@ -409,12 +402,14 @@ public class Evaluator {
     }
 
     private Lexeme evalObj(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
+        // Create a new environment for the new object
         Lexeme xenv = e.extendEnv(env, null, null);
         try {
-            Lexeme result = this.eval(pt.right, xenv);
-            return result;
+            return this.eval(pt.right, xenv);
         }
         catch (ReturnEncounteredException ex) {
+            // Object should have "return this;" as last line
+            // Return the new environment
             return ex.retVal;
         }
     }
@@ -479,6 +474,59 @@ public class Evaluator {
         else {
             System.out.print(Helpers.getPrintValWithDefault(printVal, null));
         }
+        return null;
+    }
+
+    private Lexeme evalInput(Lexeme eargs, Lexeme env) {
+        Scanner scan;
+        String inputFile = Helpers.listIndex(eargs, 0).str;
+        ArrayList<Lexeme> array = new ArrayList<>();
+        try {
+            if (inputFile.equals("stdin")) {
+                scan = new Scanner(System.in);
+            } else {
+                scan = new Scanner(new File(inputFile));
+            }
+            while (scan.hasNext()) {
+                array.add(new Lexeme(STRING, scan.next()));
+            }
+        }
+        catch (FileNotFoundException ex) {
+            Helpers.exitWithError(ex.getMessage());
+        }
+
+        return new Lexeme(ARRAY, array);
+    }
+
+    private Lexeme evalGetInt(Lexeme eargs, Lexeme env) {
+        String val = Helpers.listIndex(eargs, 0).str;
+        try {
+            return new Lexeme(INTEGER, Integer.parseInt(val));
+        }
+        catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    private Lexeme evalEq(Lexeme eargs, Lexeme env) {
+        Lexeme first = Helpers.listIndex(eargs, 0);
+        Lexeme second = Helpers.listIndex(eargs, 1);
+        if (first == null) {
+            return new Lexeme(BOOLEAN, second == null);
+        }
+        if (first.type == STRING) {
+            return new Lexeme(BOOLEAN, first.str.equals(second.str));
+        }
+        if (first.type != ENV) {
+            return new Lexeme(BOOLEAN, first.getVal().equals(second.getVal()));
+        }
+        return new Lexeme(BOOLEAN, first.equals(second));
+    }
+
+    private Lexeme evalInspect(Lexeme eargs, Lexeme env) {
+        Lexeme inspectVal = Helpers.listIndex(eargs, 0);
+        Lexeme printVal = Helpers.optionalListIndex(eargs, 1);
+        System.out.println(inspectVal.str + " is " + Helpers.getPrintValWithDefault(printVal, null));
         return null;
     }
 
@@ -578,60 +626,11 @@ public class Evaluator {
         return null;
     }
 
-    private Lexeme evalInput(Lexeme eargs, Lexeme env) {
-        Scanner scan;
-        String inputFile = Helpers.listIndex(eargs, 0).str;
-        ArrayList<Lexeme> array = new ArrayList<>();
-        try {
-            if (inputFile.equals("stdin")) {
-                scan = new Scanner(System.in);
-            } else {
-                scan = new Scanner(new File(inputFile));
-            }
-            while (scan.hasNext()) {
-                array.add(new Lexeme(STRING, scan.next()));
-            }
-        }
-        catch (FileNotFoundException ex) {
-            Helpers.exitWithError(ex.getMessage());
-        }
-
-        return new Lexeme(ARRAY, array);
-    }
-
-    private Lexeme evalGetInt(Lexeme eargs, Lexeme env) {
-        String val = Helpers.listIndex(eargs, 0).str;
-        try {
-            return new Lexeme(INTEGER, Integer.parseInt(val));
-        }
-        catch (NumberFormatException ex) {
-            return null;
-        }
-    }
-
-    private Lexeme evalEq(Lexeme eargs, Lexeme env) {
-        Lexeme first = Helpers.listIndex(eargs, 0);
-        Lexeme second = Helpers.listIndex(eargs, 1);
-        if (first == null) {
-            return new Lexeme(BOOLEAN, second == null);
-        }
-        if (first.type != ENV) {
-            return new Lexeme(BOOLEAN, first.getVal() == second.getVal());
-        }
-        return new Lexeme(BOOLEAN, first.equals(second));
-    }
-
-    private Lexeme evalInspect(Lexeme eargs, Lexeme env) {
-        Lexeme inspectVal = Helpers.listIndex(eargs, 0);
-        Lexeme printVal = Helpers.optionalListIndex(eargs, 1);
-        System.out.println(inspectVal.str + " is " + Helpers.getPrintValWithDefault(printVal, null));
-        return null;
-    }
-
     private Lexeme evalFuncCall(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme args = pt.right;
         Lexeme eargs = this.eval(args, env);
         if (pt.left.str != null && pt.left.str.equals("inspect")) {
+            // Get the raw text from the code snippet the user is inspecting
             eargs = Helpers.listCons(new Lexeme(STRING, pt.left.inspectVal), eargs);
         }
         return this.evalFuncCall(pt, eargs, env);

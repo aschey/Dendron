@@ -16,22 +16,13 @@ public class Lexer {
     private int oBracketCount;
     private int cBracketCount;
 
-    public static void main(String[] args) {
-        //Lexer lexer = new Lexer("dictionary.dpl");
-        //Lexeme token = lexer.lex();
-        //while (token.type != END_OF_INPUT) {
-        //    System.out.println(token.type + " " + token.str + " " + token.integer);
-        //    token = lexer.lex();
-    }
-
-
     public Lexer(String input, InputType inputType) {
-        final int BUFFER_SIZE = 2048;
+        // Set the amount of tokens this program can put back onto the input stream
+        final int BUFFER_SIZE = 1000;
         try {
             switch (inputType) {
                 case FILE:
-                    String file = new File("").getAbsolutePath().concat("/" + input);
-                    this.reader = new PushbackInputStream(new FileInputStream(file), BUFFER_SIZE);
+                    this.reader = new PushbackInputStream(new FileInputStream(input), BUFFER_SIZE);
                     break;
                 case STDIN:
                     this.reader = new PushbackInputStream(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), BUFFER_SIZE);

@@ -11,7 +11,7 @@ public class Interpreter {
 
         if (args.length > 0) {
             eval.evaluate(args[0], InputType.FILE, env);
-            //eval.evaluate("dictionary_take3.den", InputType.FILE, env);
+            //eval.evaluate("src/DPL/examples/rpn.den", InputType.FILE, env);
         }
         else {
             // When running the interactive interpreter, don't let System.exit() kill the program

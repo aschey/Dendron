@@ -68,7 +68,6 @@ def calculate[data] [
     return null;
 ]
 
-var data = input['test.txt'];
+var data = input['examples/input.txt'];
 var res = calculate[data];
 println[res];
-;println[calculate[data]];

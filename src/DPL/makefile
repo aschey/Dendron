@@ -90,3 +90,9 @@ dictionary: examples/dictionary.den
 
 dictionaryx: examples/dictionary.den
 	dpl examples/dictionary.den
+
+problem: examples/rpn.den
+	cat examples/rpn.den
+
+problemx: examples/rpn.den
+	dpl examples/rpn.den

@@ -10,15 +10,6 @@ public class Recognizer {
     private Lexeme currentLexeme;
     private Lexer lexer;
 
-    public static void main(String[] args) {
-        //Recognizer recognizer = new Recognizer("func.dpl");
-        //Lexeme l = recognizer.statements();
-        //recognizer.traverse(l);
-        //GraphWriter.quickGraph(l, "func");
-        //System.out.println(l.right.left.right.left.type);
-        //recognizer.prettyPrint(l);
-    }
-
     public Recognizer(String input, InputType inputType) {
         this.lexer = new Lexer(input, inputType);
         this.currentLexeme = this.lexer.lex();
@@ -36,13 +27,7 @@ public class Recognizer {
         if (types.contains(this.currentLexeme.type)) {
             return this.advance();
         }
-//        for (TokenType type : types) {
-//            if (this.check(type)) {
-//                return this.match(type);
-//            }
-//        }
-        System.out.println("Syntax error");
-        System.exit(1);
+        Helpers.exitWithError("Syntax error");
         return null;
     }
 
@@ -51,7 +36,6 @@ public class Recognizer {
     }
 
     private Lexeme advance() {
-        //System.out.println(this.currentLexeme.type + " " + this.currentLexeme.getVal());
         Lexeme current = this.currentLexeme;
         this.currentLexeme = this.lexer.lex();
         return current;
@@ -64,14 +48,7 @@ public class Recognizer {
 
     private void matchNoAdvance(TokenType type) {
         if (!this.check(type)) {
-            try {
-                System.out.println("Syntax error: Got " + this.currentLexeme.type + " expected " + type);
-                throw new Exception();
-            }
-            catch(Exception ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
+            Helpers.exitWithError("Got " + this.currentLexeme.type + " expected " + type);
         }
     }
 
@@ -104,11 +81,6 @@ public class Recognizer {
         if (this.checkMultiple(Helpers.selfEvaluating)) {
             tree = this.advance();
         }
-//        else if (this.check(MINUS)) {
-//            tree = new Lexeme(NEGATIVE);
-//            this.advance();
-//            tree.right = this.unary();
-//        }
         else if (this.check(NOT)) {
             tree = new Lexeme(NOT);
             this.advance();
@@ -119,6 +91,7 @@ public class Recognizer {
             tree = new Lexeme(GROUPING);
             tree.right = this.expression();
             this.match(C_BRACKET);
+            // Any method call on a set of brackets should be an invoke
             if (this.check(DOT)) {
                 this.match(DOT);
                 this.match(INVOKE);
@@ -152,23 +125,13 @@ public class Recognizer {
 
     private Lexeme expression() {
         Lexeme tree = this.unary();
-        //Lexeme unary = this.unary();
+        // Left-associative binary operators
         while (this.binaryOperatorPending()) {
-            //Lexeme tree = new Lexeme(BINARY);
             Lexeme temp = this.binaryOperator();
             temp.right.left = tree;
             temp.right.right = this.unary();
             tree = temp;
         }
-//        if (this.binaryOperatorPending()) {
-//            Lexeme tree = new Lexeme(BINARY);
-//            tree.left = this.binaryOperator();
-//            tree.right = new Lexeme(GLUE);
-//            tree.right.left = unary;
-//            tree.right.right = this.expression();
-//            return tree;
-//        }
-//        return unary;
         return tree;
     }
 
@@ -310,7 +273,6 @@ public class Recognizer {
         tree.left = this.matchMultiple(Helpers.binaryOperators);
         tree.right = new Lexeme(GLUE);
         return tree;
-        //return this.matchMultiple(Helpers.binaryOperators);
     }
 
     private Lexeme varExpression() {

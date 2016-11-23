@@ -210,19 +210,6 @@ def comp[a b] [
     return 0;
 ]
 
-`var t = AvlTree[comp];
-`t.insert[1];
-`t.insert[2];
-`t.insert[3];
-`for [i 1000] [
-`    t.insert[i];
-`    t.insert[-i];
-`]
-`for [i -100 100 4] [
-`    t.delete[i];
-`]
-`t.printTree[];
-
 def dict[] [
     def dictNode[key val] [
         return this;
@@ -280,8 +267,3 @@ def dict[] [
 
     return this;
 ]
-
-var d = dict[];
-d.insert[1 1];
-d.insert[2 2];
-inspect[d.find[2]];

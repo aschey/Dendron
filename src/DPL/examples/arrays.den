@@ -30,5 +30,3 @@ inspect[a];
 ` Remove values from a range of indexes (inclusive lower bound, exclusive upper bound)
 a.removeAt[0 3];
 inspect[a];
-
-` Note: all functions that can be used on arrays can be used on strings
