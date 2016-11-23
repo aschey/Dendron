@@ -1,12 +1,14 @@
-/**
- * Created by aschey on 9/24/16.
- */
 package DPL;
 
 import static DPL.TokenType.*;
 import java.util.ArrayList;
 
-public class Recognizer {
+/**
+ * Recognizer
+ * Creates a parse tree from a stream of lexemes
+ */
+
+class Recognizer {
     private Lexeme currentLexeme;
     private Lexer lexer;
 

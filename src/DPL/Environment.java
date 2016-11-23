@@ -1,34 +1,36 @@
 package DPL;
 
-/**
- * Created by aschey on 11/10/16.
- */
-
 import static DPL.TokenType.*;
 
-public class Environment {
-    private boolean varsEqual(Lexeme a, Lexeme b) {
+/**
+ * Environment
+ * A collection of methods for manipulating environments
+ */
+
+class Environment {
+    private static boolean varsEqual(Lexeme a, Lexeme b) {
         return a.getVal().equals(b.getVal());
     }
-    Lexeme extendEnv(Lexeme env, Lexeme variables, Lexeme values) {
-        return Lexeme.cons(ENV, this.makeTable(variables, values), env);
+
+    static Lexeme extendEnv(Lexeme env, Lexeme variables, Lexeme values) {
+        return Lexeme.cons(ENV, makeTable(variables, values), env);
     }
 
-    Lexeme createEnv() {
+    static Lexeme createEnv() {
         return extendEnv(null, null, null);
     }
 
-    Lexeme makeTable(Lexeme variables, Lexeme values) {
+    private static Lexeme makeTable(Lexeme variables, Lexeme values) {
         return Lexeme.cons(TABLE, variables, values);
     }
 
-    Lexeme lookupEnv(Lexeme variable, Lexeme env) {
+    static Lexeme lookupEnv(Lexeme variable, Lexeme env) {
         while (env != null) {
             Lexeme table = env.left;
             Lexeme vars = table.left;
             Lexeme vals = table.right;
             while (vars != null) {
-                if (this.varsEqual(variable, vars.left)) {
+                if (varsEqual(variable, vars.left)) {
                     return vals.left;
                 }
                 vars = vars.right;
@@ -42,18 +44,16 @@ public class Environment {
         catch (Exception ex) {
             ex.printStackTrace();
         }
-        //Helpers.exitWithError("variable " + variable.getVal() + " not found");
         return null;
     }
 
-    void updateEnv(Lexeme variable, Lexeme value, Lexeme env) {
-        //GraphWriter.quickGraph(env, "env");
+    static void updateEnv(Lexeme variable, Lexeme value, Lexeme env) {
         while (env != null) {
             Lexeme table = env.left;
             Lexeme vars = table.left;
             Lexeme vals = table.right;
             while (vars != null) {
-                if (this.varsEqual(variable, vars.left)) {
+                if (varsEqual(variable, vars.left)) {
                     vals.left = value;
                     return;
                 }
@@ -64,23 +64,26 @@ public class Environment {
         }
     }
 
-    Lexeme insert(Lexeme variable, Lexeme value, Lexeme env) {
+    static Lexeme insert(Lexeme variable, Lexeme value, Lexeme env) {
         Lexeme table = env.left;
         table.left = Lexeme.cons(GLUE, variable, table.left);
         table.right = Lexeme.cons(GLUE, value, table.right);
         return value;
     }
 
-    Lexeme insertList(Lexeme variables, Lexeme values, Lexeme env) {
+    static Lexeme insertList(Lexeme variables, Lexeme values, Lexeme env) {
         while (variables != null) {
-            this.insert(variables.left, values.left, env);
+            insert(variables.left, values.left, env);
             variables = variables.right;
             values = values.right;
         }
         return values;
     }
 
-    Lexeme getStartVal(Lexeme env) {
+    // Used for array and string methods
+    // Get the first variable in the environment
+    // This will be the variable that the method is invoked on
+    static Lexeme getCallingVal(Lexeme env) {
         return env.left.right.left;
     }
 }

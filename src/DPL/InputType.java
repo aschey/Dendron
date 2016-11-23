@@ -1,7 +1,8 @@
 package DPL;
 
 /**
- * Created by aschey on 11/18/16.
+ * InputType
+ * Represents different kinds of input to the program
  */
 enum InputType {
     FILE,

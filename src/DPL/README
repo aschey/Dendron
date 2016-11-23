@@ -3,6 +3,8 @@ The Dendron Programming Language
 Dendron files have the suffix ".den". Run Dendron files using the command "dpl filename.den".
 Additionally, you can run "dpl" by itself to evaluate input from stdin.
 
+NOTE: The java source files require the use of Java 8
+
 Objective
     The objective of the Dendron programming language is to make it as fast to type as possible while 
     still allowing whitespace to not matter in terms of formatting. As a result, square brackets have

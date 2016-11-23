@@ -1,6 +1,5 @@
 package DPL;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,31 +7,33 @@ import java.util.Arrays;
 import static DPL.TokenType.*;
 
 /**
- * Created by aschey on 10/18/16.
+ * Helpers
+ * General
  */
 public class Helpers {
 
-    static ArrayList<String> keywords = createList("if", "else", "for", "while", "var", "def", "true",
+    static final ArrayList<String> keywords = createList("if", "else", "for", "while", "var", "def", "true",
         "false", "return", "lambda", "obj", "this", "null", "and", "or", "import", "in", "invoke");
 
-    static HashMap<Character, TokenType> symbols = mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
+    static final HashMap<Character, TokenType> symbols = mapInitialize('[', O_BRACKET, ']', C_BRACKET,',', COMMA, ';', SEMICOLON, '*', STAR, '+',
     PLUS, '-', MINUS, ':', COLON, '<', LT, '>', GT, '!', NOT, '=', ASSIGN, '/', SLASH, '^', CARAT, '%', REMAINDER, '.', DOT, '#', HASH);
 
-    static ArrayList<TokenType> selfEvaluating = createList(INTEGER, STRING, BOOLEAN, NULL);
+    static final ArrayList<TokenType> selfEvaluating = createList(INTEGER, STRING, BOOLEAN, NULL);
 
-    static ArrayList<TokenType> binaryOperators = createList(LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, CARAT, SLASH, REMAINDER, AND, OR);
+    static final ArrayList<TokenType> binaryOperators = createList(LT, GT, LEQ, GEQ, EQ, NEQ, PLUS, MINUS, STAR, CARAT, SLASH, REMAINDER, AND, OR);
 
-    static ArrayList<TokenType> mathOperators = createList(PLUS, MINUS, STAR, SLASH, CARAT, REMAINDER);
+    static final ArrayList<TokenType> mathOperators = createList(PLUS, MINUS, STAR, SLASH, CARAT, REMAINDER);
 
-    static ArrayList<TokenType> intsRequired = createList(MINUS, STAR, SLASH, CARAT, REMAINDER);
+    static final ArrayList<TokenType> intsRequired = createList(MINUS, STAR, SLASH, CARAT, REMAINDER);
 
-    static ArrayList<TokenType> unaries = createList(INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE, HASH);
+    static final ArrayList<TokenType> unaries = createList(INTEGER, STRING, BOOLEAN, O_BRACKET, MINUS, LAMBDA, DOT, NULL, NOT, OBJ, VARIABLE, HASH);
 
-    static <T> ArrayList<T> createList(T... args) {
+    @SafeVarargs
+    private static <T> ArrayList<T> createList(T... args) {
         return new ArrayList<>(Arrays.asList(args));
     }
 
-    static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
+    private static <T1, T2> HashMap<T1, T2> mapInitialize(Object... args) {
         HashMap<T1, T2> result = new HashMap<>();
         for (int i = 0; i < args.length - 1; i += 2) {
             result.put((T1) args[i], (T2) args[i + 1]);
@@ -41,17 +42,13 @@ public class Helpers {
         return result;
     }
 
-    static void exitWithError(String error, int errorCode) {
+    static void exitWithError(String error) {
         System.out.println("Error: " + error);
-        System.exit(errorCode);
+        System.exit(1);
     }
 
     static void exitIfNotStringOrArray(String funcName) {
         exitWithError(funcName + " can only be called on strings and arrays");
-    }
-
-    static void exitWithError(String error) {
-        exitWithError(error, 1);
     }
 
     static TokenType stringToTokenType(String tokenString) {

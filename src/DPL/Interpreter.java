@@ -2,7 +2,8 @@ package DPL;
 import java.util.Scanner;
 
 /**
- * Created by aschey on 11/13/16.
+ * Interpreter
+ * Interfaces with user input
  */
 public class Interpreter {
     public static void main(String[] args) throws ReturnEncounteredException {
@@ -11,7 +12,6 @@ public class Interpreter {
 
         if (args.length > 0) {
             eval.evaluate(args[0], InputType.FILE, env);
-            //eval.evaluate("src/DPL/examples/rpn.den", InputType.FILE, env);
         }
         else {
             // When running the interactive interpreter, don't let System.exit() kill the program

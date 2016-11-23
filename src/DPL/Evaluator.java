@@ -9,22 +9,18 @@ import java.util.Scanner;
 import java.util.function.BiFunction;
 
 /**
- * Created by aschey on 10/19/16.
+ * Evaluator
+ * Evaluates the parse tree
  */
-public class Evaluator {
-    private Environment e;
 
-    public Evaluator() {
-        this.e = new Environment();
-    }
-
+class Evaluator {
     private boolean isTrue(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         Lexeme result = this.eval(pt, env);
         return result.bool;
     }
 
     Lexeme addBultins() {
-        Lexeme env = this.e.createEnv();
+        Lexeme env = Environment.createEnv();
         // General functions
         this.addBuiltin("println", this::evalPrintln, env);
         this.addBuiltin("print", this::evalPrint, env);
@@ -47,7 +43,7 @@ public class Evaluator {
         Lexeme tag = new Lexeme(BUILTIN);
         tag.eval = evaluator;
         Lexeme funcName = new Lexeme(VARIABLE, name);
-        this.e.insert(funcName, tag, env);
+        Environment.insert(funcName, tag, env);
     }
 
     Lexeme evaluate(String input, InputType inputType, Lexeme env) throws ReturnEncounteredException {
@@ -145,12 +141,12 @@ public class Evaluator {
     private Lexeme evalAssign(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         // Update variable value
         Lexeme value = this.eval(pt.right, env);
-        this.e.updateEnv(pt.left, value, env);
+        Environment.updateEnv(pt.left, value, env);
         return null;
     }
 
     private Lexeme evalVariable(Lexeme pt, Lexeme env) {
-        return this.e.lookupEnv(pt, env);
+        return Environment.lookupEnv(pt, env);
     }
 
     private Lexeme evalList(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
@@ -340,13 +336,13 @@ public class Evaluator {
         }
 
         // Create the new loop variable
-        this.e.insert(loopVar, loopStartLexeme, env);
+        Environment.insert(loopVar, loopStartLexeme, env);
         Lexeme result = new Lexeme(BOOLEAN, false);
 
         for (int i = loopStart; i < loopEnd; i += loopStep) {
             result = this.eval(pt.right, env);
             // Update the loop variable after each iteration
-            this.e.updateEnv(loopVar, new Lexeme(INTEGER, i + loopStep), env);
+            Environment.updateEnv(loopVar, new Lexeme(INTEGER, i + loopStep), env);
         }
 
         return result;
@@ -356,10 +352,10 @@ public class Evaluator {
         Lexeme loopVar = pt.left.left;
         Lexeme loopObj = pt.left.right;
         Lexeme eLoopObj = this.eval(loopObj, env);
-        this.e.insert(loopVar, null, env);
+        Environment.insert(loopVar, null, env);
         Lexeme result = null;
         for (Lexeme l : eLoopObj.array) {
-            this.e.updateEnv(loopVar, l, env);
+            Environment.updateEnv(loopVar, l, env);
             result = this.eval(pt.right, env);
         }
 
@@ -381,7 +377,7 @@ public class Evaluator {
     }
 
     private Lexeme evalArrayAccess(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
-        Lexeme arrayLexeme = this.e.lookupEnv(pt.left, env);
+        Lexeme arrayLexeme = Environment.lookupEnv(pt.left, env);
         int arrayIndex = this.eval(pt.right, env).integer;
         return arrayLexeme.array.get(arrayIndex);
     }
@@ -389,7 +385,7 @@ public class Evaluator {
     private Lexeme evalFuncDef(Lexeme pt, Lexeme env) {
         Lexeme closure = Lexeme.cons(CLOSURE, env, pt);
         // Insert function name
-        this.e.insert(pt.left, closure, env);
+        Environment.insert(pt.left, closure, env);
         return null;
     }
 
@@ -397,13 +393,13 @@ public class Evaluator {
         Lexeme varName = pt.left;
         Lexeme varVal = pt.right;
         Lexeme init = this.eval(varVal, env);
-        this.e.insert(varName, init, env);
+        Environment.insert(varName, init, env);
         return null;
     }
 
     private Lexeme evalObj(Lexeme pt, Lexeme env) throws ReturnEncounteredException {
         // Create a new environment for the new object
-        Lexeme xenv = e.extendEnv(env, null, null);
+        Lexeme xenv = Environment.extendEnv(env, null, null);
         try {
             return this.eval(pt.right, xenv);
         }
@@ -429,11 +425,11 @@ public class Evaluator {
 
         // Create a new environment for string and array method calls
         if (obj.type != ENV) {
-            Lexeme newEnv = this.e.extendEnv(null, null, env);
+            Lexeme newEnv = Environment.extendEnv(null, null, env);
             Lexeme vars = Helpers.getVars(pt.right);
             Lexeme vals = this.eval(vars, env);
-            this.e.insertList(vars, vals, newEnv);
-            this.e.insert(pt.left, obj, newEnv);
+            Environment.insertList(vars, vals, newEnv);
+            Environment.insert(pt.left, obj, newEnv);
             obj = newEnv;
         }
 
@@ -444,7 +440,7 @@ public class Evaluator {
             // Evaluate the right hand side of the assignment in the calling environment
             Lexeme value = this.eval(pt.right.right, env);
             // Update the value in the object's environment
-            this.e.updateEnv(pt.right.left, value, obj);
+            Environment.updateEnv(pt.right.left, value, obj);
             return null;
         }
         if (pt.right.type == FUNC_CALL) {
@@ -536,7 +532,7 @@ public class Evaluator {
     }
 
     private Lexeme evalLength(Lexeme eargs, Lexeme env) {
-        Lexeme obj = this.e.getStartVal(env);
+        Lexeme obj = Environment.getCallingVal(env);
         switch (obj.type) {
             case ARRAY:
                 return new Lexeme(INTEGER, obj.array.size());
@@ -548,7 +544,7 @@ public class Evaluator {
     }
 
     private Lexeme evalAppend(Lexeme eargs, Lexeme env) {
-        Lexeme obj = this.e.getStartVal(env);
+        Lexeme obj = Environment.getCallingVal(env);
         Lexeme valToAdd = Helpers.listIndex(eargs, 0);
         switch (obj.type) {
             case ARRAY:
@@ -562,7 +558,7 @@ public class Evaluator {
     }
 
     private Lexeme evalInsert(Lexeme eargs, Lexeme env) {
-        Lexeme obj = this.e.getStartVal(env);
+        Lexeme obj = Environment.getCallingVal(env);
         Lexeme valToAdd = Helpers.listIndex(eargs, 0);
         int index = Helpers.listIndex(eargs, 1).integer;
         switch (obj.type) {
@@ -578,7 +574,7 @@ public class Evaluator {
     }
 
     private Lexeme evalRemove(Lexeme eargs, Lexeme env) {
-        Lexeme obj = this.e.getStartVal(env);
+        Lexeme obj = Environment.getCallingVal(env);
         Lexeme valToRemove = Helpers.listIndex(eargs, 0);
         switch (obj.type) {
             case ARRAY:
@@ -604,7 +600,7 @@ public class Evaluator {
     }
 
     private Lexeme evalRemoveAt(Lexeme eargs, Lexeme env) {
-        Lexeme obj = this.e.getStartVal(env);
+        Lexeme obj = Environment.getCallingVal(env);
         Lexeme startRemove = Helpers.listIndex(eargs, 0);
         Lexeme endRemove = Helpers.optionalListIndex(eargs, 1);
         int start = startRemove.integer;
@@ -652,7 +648,7 @@ public class Evaluator {
         Lexeme function = Helpers.getFunction(closure);
         Lexeme params = function.left;
         Lexeme denv = closure.left;
-        Lexeme xenv = e.extendEnv(denv, params, eargs);
+        Lexeme xenv = Environment.extendEnv(denv, params, eargs);
         // Eval function code
         try {
             return this.eval(function.right, xenv);

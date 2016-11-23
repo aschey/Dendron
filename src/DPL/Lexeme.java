@@ -1,10 +1,12 @@
-/**
- * Created by aschey on 9/24/16.
- */
 package DPL;
 
 import java.util.ArrayList;
 import java.util.function.BiFunction;
+
+/**
+ * Lexeme
+ * Represents a node stored in a parse tree
+ */
 
 class Lexeme {
     TokenType type;
@@ -17,7 +19,6 @@ class Lexeme {
     BiFunction<Lexeme, Lexeme, Lexeme> eval;
     String inspectVal;
     boolean negative = false;
-    boolean negativeEvaled = false;
 
     Lexeme(TokenType type) {
         this.type = type;

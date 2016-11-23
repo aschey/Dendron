@@ -1,9 +1,10 @@
 package DPL;
 
 /**
- * Created by aschey on 11/18/16.
+ * InterpreterSecurityManager
+ * Allows the interactive interpreter to run without exiting on error
  */
-public class InterpreterSecurityManager extends SecurityManager {
+class InterpreterSecurityManager extends SecurityManager {
     @Override
     public void checkExit(int status) {
         throw new SecurityException();

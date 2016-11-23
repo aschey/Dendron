@@ -1,7 +1,9 @@
-/**
- * Created by aschey on 9/24/16.
- */
 package DPL;
+
+/**
+ * TokenType
+ * Different types Lexemes can have
+ */
 
 enum TokenType {
     O_BRACKET,

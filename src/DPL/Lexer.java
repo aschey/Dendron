@@ -1,16 +1,17 @@
 package DPL;
 
 import java.io.*;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Predicate;
 
 import static DPL.TokenType.*;
 
 /**
- * Created by aschey on 9/24/16.
+ * Lexer
+ * Reads characters from an input file and creates a stream of Lexemes
  */
-public class Lexer {
+
+class Lexer {
     private PushbackInputStream reader;
     private boolean lineIsComment;
     private int oBracketCount;
@@ -171,7 +172,7 @@ public class Lexer {
         return new Lexeme(NONE);
     }
 
-    public Lexeme lex() {
+    Lexeme lex() {
         this.skipWhitespace();
 
         char ch = this.read();
