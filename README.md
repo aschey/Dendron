@@ -1,48 +1,48 @@
-The Dendron Programming Language
+# The Dendron Programming Language
 
 Dendron files have the suffix ".den". Run Dendron files using the command "dpl filename.den".
 Additionally, you can run "dpl" by itself to evaluate input from stdin.
 
 NOTE: The java source files require the use of Java 8
 
-Objective
+## Objective
     The objective of the Dendron programming language is to make it as fast to type as possible while 
     still allowing whitespace to not matter in terms of formatting. As a result, square brackets have
     replaced braces and parenthesis entirely. Also, variables are delimited by whitespace instead of commas. 
 
-Limitations
+## Limitations
     Using whitespace instead of commas has some limitations when it comes to negatives.
     "1-1" must be written as "1 - 1" and "- 1" must be written as "-1" because unary negatives
     are considered a single token as must be formatted as so.
 
-Comments
-    Comments are prefaced using a backtick (`). 
+## Comments
+    Comments are prefaced using a backtick (\`). 
     Ex: ` This is a comment.
 
-Strings
+## Strings
     Strings are denoted by single quotes (''). 
     Ex: 'This is a string'.
 
-Integers
+## Integers
     Integers behave as they do in any standard language.
 
-Functions
+## Functions
     Functions are declared using the keyword "def".
     Ex:
-        def a[b] [
+        `def a[b] [
             return b;
-        ]
+        ]`
 
-Variables
+## Variables
     variables are declared using the keyword "var". 
     Ex: var a = 2;
 
-Arrays
+## Arrays
     Arrays a prefaced using a hash (#).
     Declaring an array: var a = #[1 2 3];
     Accessing an array: #a[0]
 
-For loops
+##For loops
     For loops are similar to Python's. They allow for three variants.
     Ex 1:
         Print values from 0 to 9
@@ -60,7 +60,7 @@ For loops
             println[i];
         ]
 
-Foreach loops
+## Foreach loops
     Iterates through items in an array
     Ex:
         var a = #[1 2 3];
@@ -68,7 +68,7 @@ Foreach loops
             println[i];
         ]
 
-While loops
+## While loops
     Standard while loop
     Ex:
         var i = 0;
@@ -76,12 +76,12 @@ While loops
             i = i + 1;
         ]
 
-Lambdas
+## Lambdas
     Lambdas create an anonymous function.
     Ex:
         var a = lambda[x] [ return x; ];
 
-Objects
+## Objects
     Objects are created by defining a function and returning its environment (keyword "this").
     Functions and variables inside of the object can be referenced by using a dot as the delimiter.
     Arrays inside an object are still prefaced with a hash.
@@ -101,7 +101,7 @@ Objects
         println[f.#d];
         println[f.e[]];
 
-Static objects
+## Static objects
     Static objects are created using the keyword "obj" and are assigned directly to a variable instead of 
     being instantiated by a function call. These are useful for grouping related variables and functions 
     that have no state.
@@ -116,7 +116,7 @@ Static objects
         println[a.b];
         println[a.c[]];
 
-Builtin functions
+## Builtin functions
     println
         Prints to the console on a new line
         Ex: println['a'];
@@ -152,7 +152,7 @@ Builtin functions
         Same functionality as println but also tells what you're printing
         Ex: inspect[1 + 1]; (result = "1 + 1 is 2")
 
-String and array methods
+## String and Array Methods
     The following methodsa are applicable to strings and arrays.
     Arrays are mutable, so they will modify the array.
     Strings are immutable, so they will return a new string.
@@ -178,7 +178,7 @@ String and array methods
         Ex1: 'aaa'.removeAt[1];
         Ex2: 'aaa'.removeAt[1 3];
 
-Invoke
+## Invoke
     The "invoke" function is used to invoke a lambda or a function returned from another function. This is an alternative 
     to storing the pointer in a variable and calling it from there.
     Ex1:
