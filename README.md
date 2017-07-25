@@ -18,7 +18,7 @@ are considered a single token as must be formatted as so.
 ## Comments
 Comments are prefaced using a backtick (\`).
 
-**Ex:** \`This is a comment.
+**Ex:** `\`This is a comment.`
 
 ## Strings
 Strings are denoted by single quotes ('').
@@ -32,6 +32,7 @@ Integers behave as they do in any standard language.
 Functions are declared using the keyword "def".
 
 **Ex:**
+
     def a[b] [
         return b;
     ]
@@ -52,18 +53,21 @@ Accessing an array: `#a[0]`
 For loops are similar to Python's. They allow for three variants.
 
 **Ex 1:**
+
     `Print values from 0 to 9
     for [i 10] [
         println[i];
     ]
 
 **Ex 2:**
+
     `Print values from 1 to 9
     for [i 1 10] [
         println[i];
     ]
 
 **Ex 3:**
+
     `Print values from 1 to 9 in increments of 2
     for [i 1 10 2] [
         println[i];
@@ -73,6 +77,7 @@ For loops are similar to Python's. They allow for three variants.
 Iterate through items in an array
 
 **Ex:**
+
     var a = #[1 2 3];
     for [i in a] [
         println[i];
@@ -82,6 +87,7 @@ Iterate through items in an array
 Standard while loop
 
 **Ex:**
+
     var i = 0;
     while [i < 10] [
         i = i + 1;
@@ -102,6 +108,7 @@ Arrays inside an object are still prefaced with a hash.
 Objects can be nested.
 
 **Ex:**
+
     def a[b c] [
         var d = #[1 2 3];
         def e[] [
@@ -122,6 +129,7 @@ Static objects are created using the keyword "obj" and are assigned directly to 
 These are useful for grouping related variables and functions that are stateless.
 
 **Ex:**
+
     var a = obj [
         var b = 2;
         def c[] [
@@ -146,10 +154,12 @@ print: Prints to the console on the same line
 input: Retrieves input from a file or stdin and returns an array containing each whitespace-delimited token
 
 **Ex1:**
+
     var a = input['stdin'];
     println[#a[0]];
 
 **Ex2:**
+
     var a = input['test.txt'];
     println[#a[0]];
 
@@ -161,14 +171,17 @@ str: Converts its argument into a string
 eq: Returns true if two strings have the same value, two integers have the same value, or two objects point to the same value
 
 **Ex1:**
+
     println[eq['a' 'a']]; \`true
 
 **Ex2:**
+
     var a = #[1 2];
     var b = #[1 2];
     println[eq[a b]]; \`false
 
 **Ex3:**
+
     var a = #[1 2];
     var b = a;
     println[eq[a b]]; (true)
@@ -224,6 +237,7 @@ The "invoke" function is used to invoke a lambda or a function returned from ano
 This is an alternative to storing the pointer in a variable and calling it from there.
 
 **Ex1**
+
     ` Without invoke:
     var a = lambda[a] [ return a; ];
     a[1];
@@ -232,6 +246,7 @@ This is an alternative to storing the pointer in a variable and calling it from 
     [lambda[a] [ return a; ]].invoke[1];
 
 **Ex2:**
+
     def f[a] [
         return a;
     ]
