@@ -16,9 +16,9 @@ Using whitespace instead of commas has some limitations when it comes to negativ
 are considered a single token as must be formatted as so.
 
 ## Comments
-Comments are prefaced using a backtick (`/``).
+Comments are prefaced using a backtick (`` ` ``).
 
-**Ex:** `/`This is a comment.`
+**Ex:** `` `This is a comment. ``
 
 ## Strings
 Strings are denoted by single quotes (`''`).
@@ -47,7 +47,7 @@ Arrays a prefaced using a hash (`#`).
 
 Declaring an array: `var a = #[1 2 3];`
 
-Accessing an array: `/#a[0]`
+Accessing an array: `#a[0]`
 
 ##For loops
 For loops are similar to Python's. They allow for three variants.
@@ -188,7 +188,7 @@ These are useful for grouping related variables and functions that are stateless
 
 `inspect`: Same functionality as println but also tells what you're printing
 
-**Ex:** `inspect[1 + 1]; `result = "1 + 1 is 2"
+**Ex:** `` inspect[1 + 1]; `result = "1 + 1 is 2" ``
 
 ## String and Array Methods
 The following methods are applicable to strings and arrays.
@@ -198,39 +198,39 @@ Arrays are mutable, so they will modify the array.
 Strings are immutable, so they will return a new string.
 
 
-Length: Returns the length of the object
+`length:` Returns the length of the object
 
-**Ex:** `'aa'.length[];`
++ **Ex:** `'aa'.length[];`
 
 
 `append`: Adds an element to the end of the object
 
-**Ex:** `#[1 2 3].append[4];`
++ **Ex:** `#[1 2 3].append[4];`
 
 
 `insert`: Inserts an element at the specified index
 
-**First param:** object to insert
++ **First param:** object to insert
 
-**Second param:** index at which to insert
++ **Second param:** index at which to insert
 
-**Ex:** `'aa'.insert['bb' 1];`
++ **Ex:** `'aa'.insert['bb' 1];`
 
 
 `remove`: Finds the specified substring or element and removes it from the object
 
-**Ex:** #[1 2 3].remove[2];
++ **Ex:** `#[1 2 3].remove[2];`
 
 
 `RemoveAt`: Removes the elements from the specified index or indexes. If no end index is specified, only the element at the start index will be removed.
 
-**First param:** start index (inclusive)
++ **First param:** start index (inclusive)
 
-**Second param (optional):** end index (exclusive)
++ **Second param (optional):** end index (exclusive)
 
-**Ex1:** `'aaa'.removeAt[1];`
++ **Ex1:** `'aaa'.removeAt[1];`
 
-**Ex2:** `'aaa'.removeAt[1 3];`
++ **Ex2:** `'aaa'.removeAt[1 3];`
 
 ## Invoke
 The `invoke` function is used to invoke a lambda or a function returned from another function. 
