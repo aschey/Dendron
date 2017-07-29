@@ -1,4 +1,0 @@
-var a = 1;
-for [i 10] [
-inspect[[a < 2] and [a < -2]];
-]

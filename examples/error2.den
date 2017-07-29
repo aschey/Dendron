@@ -1,5 +1,0 @@
-` Illustrates a missing bracket error
-
-var a = 2;
-if [a == 2] [
-    println[a];
