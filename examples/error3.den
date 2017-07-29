@@ -1,0 +1,3 @@
+` Illustrates an invalid array declaration
+
+var a = [1 2];

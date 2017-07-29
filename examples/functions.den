@@ -1,0 +1,71 @@
+` Simple function declaration
+def add[x y] [
+    return x + y;
+]
+inspect[add[2 3]];
+
+` 1st-class function
+def g[f x y] [
+    return f[x y];
+]
+inspect[g[add 2 3]];
+
+` lambda function
+var mult = lambda[x y] [return x * y;];
+inspect[mult[2 3]];
+
+` Functions that return objects
+def class[a b] [
+    
+    ` Classes can be nested
+    def innerClass[] [
+        var str1 = 'abc';
+        var str2 = 'def';
+        
+        def remString[start end] [
+            return str1.append[str2].removeAt[start end];
+        ]
+
+        return this;
+    ]
+    
+    ` The obj keyword allows for the creation of static classes
+    var static = obj [
+        var arr = #[4 5 6];
+
+        def index[i] [
+            return #arr[i];
+        ]
+
+        return this;
+    ];
+
+    var x = #[1 static 'a' lambda[a b] [ return a.remove[b]; ]];
+
+    return this;
+]
+
+var c = class[10 20];
+
+` Properties and functions are accessed with a '.'
+inspect[c.a];
+
+` dot operators can be nested
+inspect[c.static.index[0]];
+
+var inner = c.innerClass[];
+inspect[inner.remString[0 4]];
+
+` Calling a function that is returned by a lambda or some other function is done by
+` wrapping the result in a call to "invoke"
+def simple[a] [
+    return a;
+]
+
+def getSimple[] [
+    return simple;
+]
+
+inspect[[getSimple[]].invoke[1]];
+inspect[[c.#x[3]].invoke['abc' 'c']];
+inspect[[lambda[] [ return 'a'; ]].invoke[]];
